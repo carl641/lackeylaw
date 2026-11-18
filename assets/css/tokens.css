@@ -8,13 +8,13 @@
 :root {
   /* ---- Brand colour ------------------------------------------------ */
   --c-maroon-900: #3a0b01;   /* deepest: header, footer, hero base     */
-  --c-maroon-700: #6f1200;   /* PRIMARY brand maroon                    */
+  --c-maroon-700: #6f1400;   /* PRIMARY brand maroon (from the logo)    */
   --c-maroon-500: #8c2010;   /* hover / lighter accent                  */
   --c-maroon-100: #f6e7e3;   /* tint for alerts, highlights             */
 
   --c-gold-700:   #8a6629;   /* gold that is safe for small text on white */
   --c-gold-500:   #c8912a;   /* rules, icons, borders                   */
-  --c-gold-400:   #e8ad4a;   /* PRIMARY brand gold (on dark only)       */
+  --c-gold-400:   #e8a713;   /* PRIMARY brand gold (from the logo)      */
   --c-gold-100:   #f6ebd3;   /* tint                                     */
 
   /* ---- Neutrals ---------------------------------------------------- */
@@ -27,7 +27,7 @@
 
   /* ---- Feedback ---------------------------------------------------- */
   --c-success:    #2f6b3a;
-  --c-focus:      #e8ad4a;
+  --c-focus:      #e8a713;
 
   /* ---- Semantic aliases (use these in components) ------------------ */
   --color-bg:          var(--c-white);
@@ -55,7 +55,7 @@
   --fs-lead:    clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
   --fs-body:    1.0625rem;  /* 17px */
   --fs-small:   0.9375rem;  /* 15px */
-  --fs-eyebrow: 0.8125rem;  /* 13px, uppercase */
+  --fs-label: 0.8125rem;  /* 13px, uppercase labels (roles, dates) */
 
   --lh-tight: 1.15;
   --lh-snug:  1.3;
@@ -66,7 +66,7 @@
   --fw-bold:    700;
   --fw-black:   800;
 
-  --tracking-eyebrow: 0.14em;
+  --tracking-label: 0.14em;
 
   /* ---- Spacing (8px scale) ----------------------------------------- */
   --sp-1: 0.25rem;  /* 4  */
@@ -85,7 +85,7 @@
   --w-wide:    1280px;  /* hero / full sections */
   --w-read:    760px;   /* articles, FAQ */
   --gutter:    clamp(1rem, 0.6rem + 2vw, 2rem);
-  --header-h:  76px;
+  --header-h:  88px;
 
   /* ---- Shape & depth ----------------------------------------------- */
   --r-sm:   4px;
