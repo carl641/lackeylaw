@@ -65,6 +65,54 @@
     onScroll();
   }
 
+  // Auto-scrolling strip (awards): items are cloned once so the loop is
+  // seamless; it pauses on hover, focus and touch, and stays a normal
+  // swipeable scroller for visitors who prefer reduced motion.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.scroller[data-autoscroll]').forEach(function (track) {
+      var originals = Array.prototype.slice.call(track.children);
+      originals.forEach(function (el) {
+        var c = el.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.querySelectorAll('a, button').forEach(function (f) { f.tabIndex = -1; });
+        track.appendChild(c);
+      });
+      track.classList.add('is-auto');
+      var n = originals.length;
+      var period = function () { return track.children[n].offsetLeft - track.children[0].offsetLeft; };
+      var pos = track.scrollLeft, paused = false, resumeT, last = null, speed = 40; // px per second
+      var pause = function () { paused = true; clearTimeout(resumeT); };
+      var resume = function (delay) {
+        clearTimeout(resumeT);
+        resumeT = setTimeout(function () { pos = track.scrollLeft; last = null; paused = false; }, delay || 0);
+      };
+      track.addEventListener('mouseenter', pause);
+      track.addEventListener('mouseleave', function () { resume(); });
+      track.addEventListener('focusin', pause);
+      track.addEventListener('focusout', function () { resume(); });
+      track.addEventListener('touchstart', pause, { passive: true });
+      track.addEventListener('touchend', function () { resume(2500); }, { passive: true });
+      track.addEventListener('wheel', function () { pause(); resume(2500); }, { passive: true });
+      var step = function (t) {
+        if (!paused && !document.hidden) {
+          if (last !== null) {
+            var half = period();
+            pos += speed * Math.min(t - last, 100) / 1000;
+            if (pos >= half) pos -= half;
+            track.scrollLeft = pos;
+          }
+          last = t;
+        } else {
+          last = null;
+          var h = period();
+          if (track.scrollLeft >= h) track.scrollLeft -= h;
+        }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
   // Reveal on scroll (skipped when the visitor prefers reduced motion)
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
