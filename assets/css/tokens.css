@@ -1,0 +1,112 @@
+/* =====================================================================
+   The Lackey Law Firm — design tokens
+   The single source of truth for colour, type, spacing and shape.
+   Every other stylesheet refers to these variables; no raw hex values
+   should appear anywhere else on the site.
+   Reference: /style/
+   ===================================================================== */
+:root {
+  /* ---- Brand colour ------------------------------------------------ */
+  --c-maroon-900: #3a0b01;   /* deepest: header, footer, hero base     */
+  --c-maroon-700: #6f1200;   /* PRIMARY brand maroon                    */
+  --c-maroon-500: #8c2010;   /* hover / lighter accent                  */
+  --c-maroon-100: #f6e7e3;   /* tint for alerts, highlights             */
+
+  --c-gold-700:   #8a6629;   /* gold that is safe for small text on white */
+  --c-gold-500:   #c8912a;   /* rules, icons, borders                   */
+  --c-gold-400:   #e8ad4a;   /* PRIMARY brand gold (on dark only)       */
+  --c-gold-100:   #f6ebd3;   /* tint                                     */
+
+  /* ---- Neutrals ---------------------------------------------------- */
+  --c-ink:        #16140f;   /* headings                                 */
+  --c-text:       #2b2b2b;   /* body copy                                */
+  --c-muted:      #5f5f5f;   /* secondary copy, captions                 */
+  --c-rule:       #e6e0d4;   /* borders, dividers                        */
+  --c-cream:      #f7f3ec;   /* alternate section background             */
+  --c-white:      #ffffff;
+
+  /* ---- Feedback ---------------------------------------------------- */
+  --c-success:    #2f6b3a;
+  --c-focus:      #e8ad4a;
+
+  /* ---- Semantic aliases (use these in components) ------------------ */
+  --color-bg:          var(--c-white);
+  --color-bg-alt:      var(--c-cream);
+  --color-bg-dark:     var(--c-maroon-900);
+  --color-heading:     var(--c-ink);
+  --color-text:        var(--c-text);
+  --color-muted:       var(--c-muted);
+  --color-link:        var(--c-maroon-700);
+  --color-link-hover:  var(--c-gold-700);
+  --color-primary:     var(--c-maroon-700);
+  --color-accent:      var(--c-gold-400);
+  --color-border:      var(--c-rule);
+
+  /* ---- Type -------------------------------------------------------- */
+  --font-heading: "Montserrat", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-body:    "Mulish", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+  /* fluid scale: phone -> desktop */
+  --fs-display: clamp(2.4rem, 1.6rem + 3.6vw, 4rem);     /* hero H1   */
+  --fs-h1:      clamp(2rem,   1.5rem + 2.2vw, 3rem);
+  --fs-h2:      clamp(1.6rem, 1.3rem + 1.4vw, 2.25rem);
+  --fs-h3:      clamp(1.25rem,1.1rem + 0.6vw, 1.5rem);
+  --fs-h4:      1.125rem;
+  --fs-lead:    clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
+  --fs-body:    1.0625rem;  /* 17px */
+  --fs-small:   0.9375rem;  /* 15px */
+  --fs-eyebrow: 0.8125rem;  /* 13px, uppercase */
+
+  --lh-tight: 1.15;
+  --lh-snug:  1.3;
+  --lh-body:  1.7;
+
+  --fw-regular: 400;
+  --fw-semi:    600;
+  --fw-bold:    700;
+  --fw-black:   800;
+
+  --tracking-eyebrow: 0.14em;
+
+  /* ---- Spacing (8px scale) ----------------------------------------- */
+  --sp-1: 0.25rem;  /* 4  */
+  --sp-2: 0.5rem;   /* 8  */
+  --sp-3: 0.75rem;  /* 12 */
+  --sp-4: 1rem;     /* 16 */
+  --sp-5: 1.5rem;   /* 24 */
+  --sp-6: 2rem;     /* 32 */
+  --sp-7: 3rem;     /* 48 */
+  --sp-8: 4rem;     /* 64 */
+  --sp-9: 6rem;     /* 96 */
+  --section-pad: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+
+  /* ---- Layout ------------------------------------------------------ */
+  --w-page:    1140px;  /* default container */
+  --w-wide:    1280px;  /* hero / full sections */
+  --w-read:    760px;   /* articles, FAQ */
+  --gutter:    clamp(1rem, 0.6rem + 2vw, 2rem);
+  --header-h:  76px;
+
+  /* ---- Shape & depth ----------------------------------------------- */
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   14px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgb(22 20 15 / .06), 0 1px 3px rgb(22 20 15 / .08);
+  --shadow-md: 0 4px 12px rgb(22 20 15 / .08), 0 2px 4px rgb(22 20 15 / .06);
+  --shadow-lg: 0 18px 40px rgb(58 11 1 / .16), 0 6px 12px rgb(22 20 15 / .08);
+
+  --ring: 0 0 0 3px var(--c-focus);
+
+  /* ---- Motion ------------------------------------------------------ */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur-fast: 150ms;
+  --dur:      260ms;
+  --dur-slow: 600ms;
+}
+
+/* Breakpoints (for reference — CSS variables can't be used in @media):
+   phone   <= 767px
+   tablet  768px – 1024px
+   desktop >= 1025px                                                    */

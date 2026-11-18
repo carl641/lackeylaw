@@ -15,6 +15,7 @@ A static copy of https://www.thelackeylawfirm.com/, moved off WordPress so it ca
 | `sitemap.xml`, `robots.txt` | SEO files (`sitemap.xml` is kept up to date by the blog-feed script) |
 | `scripts/update_blog_feeds.py` | Rebuilds the Latest News feed, the blog listing pages and the sitemap from the posts, and keeps every post on the universal layout (see below) |
 | `assets/css/blog-post.css` | The universal blog post layout |
+| `style/`, `assets/css/tokens.css`, `assets/css/site.css`, `assets/js/site.js` | **Proposed** unified design system: brand tokens, one site stylesheet and one small script, with a style guide and sample home page at `/style/` (not linked from the site, `noindex`). Not used by other pages yet |
 | `.github/workflows/update-blog-feeds.yml` | Runs that script automatically on every push to `main` |
 
 Old WordPress URLs that used to 301-redirect (e.g. `/dui-and-traffic/`, `/personal-injury-lawyer-in-madison-al/`) have small redirect pages so existing links keep working.
