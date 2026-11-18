@@ -1,5 +1,6 @@
 /* The Lackey Law Firm — site script (replaces jQuery + Elementor runtime).
-   Mobile menu, nav dropdowns, tabs, sticky-header shadow, reveal-on-scroll. No dependencies. */
+   Mobile menu, nav dropdowns, tabs, sticky-header shadow, reveal-on-scroll,
+   lazy JotForm embed and deferred chat widget. No dependencies. */
 (function () {
   var doc = document.documentElement;
   doc.classList.add('js');
@@ -79,7 +80,13 @@
       });
       track.classList.add('is-auto');
       var n = originals.length;
-      var period = function () { return track.children[n].offsetLeft - track.children[0].offsetLeft; };
+      // Measure the loop length once (and again when the strip resizes),
+      // not on every animation frame, to avoid forced layout.
+      var half = 0;
+      var measure = function () { half = track.children[n].offsetLeft - track.children[0].offsetLeft; };
+      measure();
+      if ('ResizeObserver' in window) new ResizeObserver(measure).observe(track);
+      else window.addEventListener('resize', measure);
       var pos = track.scrollLeft, paused = false, resumeT, last = null, speed = 40; // px per second
       var pause = function () { paused = true; clearTimeout(resumeT); };
       var resume = function (delay) {
@@ -95,8 +102,7 @@
       track.addEventListener('wheel', function () { pause(); resume(2500); }, { passive: true });
       var step = function (t) {
         if (!paused && !document.hidden) {
-          if (last !== null) {
-            var half = period();
+          if (last !== null && half > 0) {
             pos += speed * Math.min(t - last, 100) / 1000;
             if (pos >= half) pos -= half;
             track.scrollLeft = pos;
@@ -104,14 +110,60 @@
           last = t;
         } else {
           last = null;
-          var h = period();
-          if (track.scrollLeft >= h) track.scrollLeft -= h;
+          if (half > 0 && track.scrollLeft >= half) track.scrollLeft -= half;
         }
         requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
     });
   }
+
+  // JotForm contact form: built only when it nears the screen. The form brings
+  // reCAPTCHA and ~2 MB of third-party script, so loading it up front was the
+  // main cause of slow load and blocked main thread on the home page.
+  var loadScript = function (src, onload) {
+    var sc = document.createElement('script');
+    sc.src = src; sc.async = true;
+    if (onload) sc.onload = onload;
+    document.head.appendChild(sc);
+  };
+  var forms = document.querySelectorAll('[data-jotform]');
+  var buildForm = function (box) {
+    if (box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    var id = box.getAttribute('data-jotform');
+    var f = document.createElement('iframe');
+    f.id = 'JotFormIFrame-' + id;
+    f.title = 'Contact form';
+    f.src = 'https://form.jotform.com/' + id;
+    f.allow = 'geolocation; microphone; camera; fullscreen';
+    f.setAttribute('allowtransparency', 'true');
+    box.appendChild(f);
+    loadScript('https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js', function () {
+      if (window.jotformEmbedHandler) window.jotformEmbedHandler("iframe[id='" + f.id + "']", 'https://form.jotform.com/');
+    });
+  };
+  if (forms.length) {
+    if ('IntersectionObserver' in window) {
+      var fio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { fio.unobserve(en.target); buildForm(en.target); } });
+      }, { rootMargin: '400px 0px' });
+      forms.forEach(function (box) { fio.observe(box); });
+    } else {
+      forms.forEach(buildForm);
+    }
+  }
+
+  // Collect.chat widget: loaded on the visitor's first scroll, tap, click or
+  // key press instead of during page load.
+  var chatEvents = ['scroll', 'pointerdown', 'keydown', 'touchstart'];
+  var loadChat = function () {
+    chatEvents.forEach(function (ev) { window.removeEventListener(ev, loadChat, { passive: true }); });
+    if (window.CollectId) return;
+    window.CollectId = '5db1efdece96ee05323484e9';
+    loadScript('https://collectcdn.com/launcher.js');
+  };
+  chatEvents.forEach(function (ev) { window.addEventListener(ev, loadChat, { passive: true }); });
 
   // Reveal on scroll (skipped when the visitor prefers reduced motion)
   var items = document.querySelectorAll('.reveal');
