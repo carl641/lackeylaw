@@ -11,8 +11,7 @@ What it updates
   2. The blog listing pages blog/, blog/2/, blog/3/ ... : 6 posts per page, newest first,
      with page-number links. New pages are created (and surplus ones removed) as needed.
   3. sitemap.xml: every post and every blog listing page is listed.
-  4. Every blog post: links the shared layout stylesheet (assets/css/blog-post.css) and has
-     its body headings renumbered to H2 > H3 > H4 with no skipped levels; empty
+  4. Every blog post: has its body headings renumbered to H2 > H3 > H4 with no skipped levels; empty
      paragraphs and stray line breaks left by the old editor are removed (title lines
      typed as "Title<br>text" become real headings, typed lists become lists, and one-item lists used as subsection titles become subheadings; numbered
      ones keep their number), and in-article images narrower than
@@ -20,8 +19,8 @@ What it updates
      "Back to Blog" link sits under the hero, and the schema breadcrumb is Home > Blog > Post.
 
 What counts as a blog post
-  A folder <slug>/index.html (at the site root) that uses the single-post template
-  (data-elementor-type="single-post") and has "@type":"Article" schema with a "datePublished".
+  A folder <slug>/index.html (at the site root) that uses the post layout
+  (<article class="post">) and has "@type":"Article" schema with a "datePublished".
   Posts are ordered by datePublished, newest first. See README.md, "Adding a blog post".
 
 Only the Python standard library is used, so it runs anywhere (including GitHub Actions).
@@ -51,7 +50,7 @@ def _excerpt(s, limit=150):
     m = re.search(r'<meta name="description" content="([^"]*)"', s)
     text = _text(m.group(1)) if m else ""
     if not text or "not set" in text.lower():
-        body = s.split('data-elementor-type="single-post"', 1)[-1]
+        body = s.split(BODY_START, 1)[-1]
         for p in re.findall(r"<p\b[^>]*>(.*?)</p>", body, re.S):
             text = _text(p)
             if len(text) > 60:
@@ -65,7 +64,7 @@ def read_posts():
     posts = []
     for path in glob.glob(os.path.join(ROOT, "*", "index.html")):
         s = open(path, encoding="utf-8").read()
-        if 'http-equiv="refresh"' in s or 'data-elementor-type="single-post"' not in s:
+        if 'http-equiv="refresh"' in s or '<article class="post">' not in s:
             continue
         if '"@type":"Article"' not in s:
             continue  # single-post template but not a blog article (e.g. a practice page)
@@ -75,10 +74,10 @@ def read_posts():
             continue
         slug = os.path.basename(os.path.dirname(path))
         date = datetime.fromisoformat(m.group(1))
-        t = re.search(r'<h1 class="elementor-heading-title[^>]*>(.*?)</h1>', s, re.S)
+        t = re.search(r'<h1 class="post__title"[^>]*>(.*?)</h1>', s, re.S)
         title = _text(t.group(1)) if t else _text(re.search(r"<title>(.*?)</title>", s, re.S).group(1)).split(" - ")[0]
-        # featured image: the template's featured-image widget, else og:image
-        tag = re.search(r'theme-post-featured-image\.default">\s*(<img[^>]*>)', s)
+        # featured image: the hero image at the top of the post, else og:image
+        tag = re.search(r'<figure class="post__hero">\s*(<img[^>]*>)', s)
         src = re.search(r'src="\.\./images/([^"]+)"', tag.group(1)) if tag else None
         if src:
             a = re.search(r'alt="([^"]*)"', tag.group(1))
@@ -86,9 +85,8 @@ def read_posts():
         else:
             og = re.search(r'og:image" content="[^"]*/images/([^"]+)"', s)
             image, alt = (og.group(1) if og else None), ""
-        pid = re.search(r"\bpostid-(\d+)", s) or re.search(r'single-post"[^>]*\bpost-(\d+)', s)
         posts.append(dict(slug=slug, date=date, title=title, image=image, alt=alt or title,
-                          excerpt=_excerpt(s), pid=pid.group(1) if pid else ""))
+                          excerpt=_excerpt(s)))
     posts.sort(key=lambda p: (p["date"], p["slug"]), reverse=True)
     return posts
 
@@ -98,7 +96,16 @@ def nice_date(d):
 
 
 # ------------------------------------------------- universal post layout
-POST_CSS_LINK = '<link rel="stylesheet" id="llf-blog-post-css" href="../assets/css/blog-post.css?v=11" media="all" />'
+# The post body sits between these markers; the layout itself is the .post component in assets/css/site.css.
+BODY_START, BODY_END = "<!-- post-body:start -->", "<!-- post-body:end -->"
+
+
+def body_bounds(s):
+    start = s.find(BODY_START)
+    if start < 0:
+        return -1, -1
+    end = s.find(BODY_END, start)
+    return start, (len(s) if end < 0 else end)
 
 
 def normalize_headings(s):
@@ -108,11 +115,9 @@ def normalize_headings(s):
     importance but are renumbered: a heading one step below the previous section heading
     becomes the next level down (H2 followed by H5 becomes H2 then H3), never deeper than H4.
     """
-    start = s.find('data-widget_type="theme-post-content.default"')
+    start, end = body_bounds(s)
     if start < 0:
         return s
-    end = s.find("<footer", start)
-    end = len(s) if end < 0 else end
     body = s[start:end]
     stack, out, last, current = [], [], 0, None
     for m in re.finditer(r"<(/?)h([1-6])\b", body):
@@ -169,23 +174,21 @@ SMALL_IMAGE = 600  # in-article images narrower than this show at their own size
 
 
 def mark_small_images(s):
-    start = s.find('data-widget_type="theme-post-content.default"')
+    start, end = body_bounds(s)
     if start < 0:
         return s
-    end = s.find("<footer", start)
-    end = len(s) if end < 0 else end
 
     def fix(m):
         tag = m.group(0)
         src = re.search(r'src="\.\./images/([^"?]+)', tag)
-        if not src or "llf-img-native" in tag:
+        if not src or "img-native" in tag:
             return tag
         size = image_size(os.path.join(ROOT, "images", src.group(1)))
         if not size or size[0] >= SMALL_IMAGE:
             return tag
         if 'class="' in tag:
-            return tag.replace('class="', 'class="llf-img-native ', 1)
-        return tag.replace("<img", '<img class="llf-img-native"', 1)
+            return tag.replace('class="', 'class="img-native ', 1)
+        return tag.replace("<img", '<img class="img-native"', 1)
 
     return s[:start] + re.sub(r"<img\b[^>]*>", fix, s[start:end]) + s[end:]
 
@@ -196,14 +199,14 @@ BC_START, BC_END = "<!-- breadcrumbs:start -->", "<!-- breadcrumbs:end -->"
 
 def breadcrumbs(s, title):
     """A "Back to Blog" link under the hero, plus a Home > Blog > Post trail in the schema data."""
-    trail = (f'{BC_START}<nav class="llf-breadcrumbs" aria-label="Back to the blog">'
-             f'<a class="llf-back-btn" href="../blog/">Back to Blog</a></nav>{BC_END}')
+    trail = (f'{BC_START}<nav class="post__back" aria-label="Back to the blog">'
+             f'<a class="btn btn--outline btn--sm" href="../blog/">Back to Blog</a></nav>{BC_END}')
     if BC_START in s:
         s = re.sub(re.escape(BC_START) + r".*?" + re.escape(BC_END), lambda m: trail, s, count=1, flags=re.S)
     else:  # place it just before the date line, i.e. right under the hero image
-        anchor = '<div class="elementor-element elementor-element-7adee78 '
+        anchor = '<time class="post__date"'
         if anchor in s:
-            s = s.replace(anchor, trail + "\n\t\t\t\t" + anchor, 1)
+            s = s.replace(anchor, trail + "\n" + anchor, 1)
     # schema: Home > Blog > Post
     def fix(m):
         items = m.group(2)
@@ -344,11 +347,9 @@ def _rewrite_p(attrs, inner):
 
 
 def tidy_paragraphs(s):
-    start = s.find('data-widget_type="theme-post-content.default"')
+    start, end = body_bounds(s)
     if start < 0:
         return s
-    end = s.find("<footer", start)
-    end = len(s) if end < 0 else end
     body = s[start:end]
 
     def p_fix(m):
@@ -398,72 +399,38 @@ def tidy_paragraphs(s):
 
 
 def update_posts(changed):
-    """Give every blog post the shared layout stylesheet and a clean heading hierarchy."""
+    """Give every blog post a clean heading hierarchy and the Back to Blog link."""
     for p in read_posts():
         path = os.path.join(ROOT, p["slug"], "index.html")
         s = open(path, encoding="utf-8").read()
-        new = s
-        if 'id="llf-blog-post-css"' not in new:
-            new = new.replace("</head>", POST_CSS_LINK + "\n</head>", 1)
-        new = breadcrumbs(mark_small_images(normalize_headings(tidy_paragraphs(new))), p["title"])
+        new = breadcrumbs(mark_small_images(normalize_headings(tidy_paragraphs(s))), p["title"])
         if new != s:
             changed.append(path)
             open(path, "w", encoding="utf-8").write(new)
 
 
 # ------------------------------------------------------------- Latest News feed
-NEWS_CSS = """<style>
-  .llf-news{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;width:100%;max-width:1100px;margin:0 auto;padding:0;box-sizing:border-box;text-align:left}
-  .llf-news *{box-sizing:border-box}
-  .llf-news-card{display:flex;flex-direction:column;min-width:0;background:#fff;border:1px solid #eee6d6;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:box-shadow .2s,transform .2s}
-  .llf-news-card:hover{box-shadow:0 10px 26px rgba(0,0,0,.10);transform:translateY(-2px)}
-  .llf-news-thumb{display:block;aspect-ratio:16/10;overflow:hidden;background:#f3efe7}
-  .llf-news-thumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
-  .llf-news-card:hover .llf-news-thumb img{transform:scale(1.04)}
-  .llf-news-body{display:flex;flex-direction:column;flex:1;padding:20px 22px 22px}
-  .llf-news-date{font-family:"Montserrat",sans-serif;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#B8862B;margin:0 0 8px}
-  .llf-news-title{font-family:"Mulish",sans-serif;font-size:19px;font-weight:800;line-height:1.3;margin:0 0 10px;color:#2b2b2b}
-  .llf-news-title a{color:inherit;text-decoration:none}
-  .llf-news-title a:hover,.llf-news-title a:focus{color:#6F1200}
-  .llf-news-excerpt{font-family:"Montserrat",sans-serif;font-size:14.5px;line-height:1.6;color:#5f5f5f;margin:0 0 16px}
-  .llf-news-more{margin-top:auto;font-family:"Montserrat",sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6F1200;text-decoration:none}
-  .llf-news-more:hover,.llf-news-more:focus{color:#B8862B}
-  @media (max-width:1024px) and (min-width:641px){.llf-news{grid-template-columns:1fr;gap:20px}.llf-news-card{flex-direction:row}.llf-news-thumb{flex:0 0 38%;aspect-ratio:auto;min-height:190px}.llf-news-body{padding:18px 22px}}
-  @media (max-width:640px){.llf-news{grid-template-columns:1fr;gap:20px}.llf-news-title{font-size:18px}}
-</style>"""
-
-
-LISTING_CSS = """<style>
-  /* blog listing pages: same cards as Latest News, 6 per page */
-  .elementor-posts-container:has(> .llf-news){display:block !important}
-  .llf-news--listing{max-width:1180px;margin:8px auto 0}
-  .elementor-pagination{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:40px !important;font-family:"Montserrat",sans-serif}
-  .elementor-pagination .page-numbers{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;padding:0 12px;border:1px solid #eee6d6;border-radius:8px;background:#fff;color:#6F1200;font-weight:700;font-size:14px;text-decoration:none;margin:0 !important}
-  .elementor-pagination a.page-numbers:hover,.elementor-pagination a.page-numbers:focus{border-color:#E9A825;color:#B8862B}
-  .elementor-pagination .page-numbers.current{background:#E9A825;border-color:#E9A825;color:#fff}
-</style>"""
-
-
 def news_card(p, prefix, heading="h3"):
-    """One post card. Used by both the Latest News feed and the blog listing pages."""
+    """One post card (the .post-card component in assets/css/site.css).
+    Used by both the Latest News feed and the blog listing pages."""
     url = f"{prefix}{p['slug']}/"
     title = html.escape(p["title"])
     thumb = ""
     if p["image"]:
-        thumb = (f'<a class="llf-news-thumb" href="{url}" tabindex="-1" aria-hidden="true">'
-                 f'<img src="{prefix}images/{p["image"]}" alt="{html.escape(p["alt"])}" loading="lazy" decoding="async"></a>')
-    return (f'<article class="llf-news-card" role="listitem">{thumb}<div class="llf-news-body">'
-            f'<time class="llf-news-date" datetime="{p["date"]:%Y-%m-%d}">{nice_date(p["date"])}</time>'
-            f'<{heading} class="llf-news-title"><a href="{url}">{title}</a></{heading}>'
-            f'<p class="llf-news-excerpt">{html.escape(p["excerpt"])}</p>'
-            f'<a class="llf-news-more" href="{url}" aria-label="Read more about {title}">Read More &raquo;</a>'
+        thumb = (f'<div class="post-card__img"><img src="{prefix}images/{p["image"]}" alt="{html.escape(p["alt"])}" '
+                 f'loading="lazy" decoding="async"></div>')
+    return (f'<article class="post-card">{thumb}<div class="post-card__body">'
+            f'<time datetime="{p["date"]:%Y-%m-%d}">{nice_date(p["date"])}</time>'
+            f'<{heading}><a href="{url}">{title}</a></{heading}>'
+            f'<p>{html.escape(p["excerpt"])}</p>'
+            f'<span class="btn-link" aria-hidden="true">Read More</span>'
             f"</div></article>")
 
 
 def news_block(posts, prefix):
     cards = [news_card(p, prefix) for p in posts[:LATEST_COUNT]]
     return (f"{START}\n<!-- Generated by scripts/update_blog_feeds.py from the blog posts. Do not edit by hand. -->\n"
-            f"{NEWS_CSS}\n<div class=\"llf-news\" role=\"list\">\n" + "\n".join(cards) + f"\n</div>\n{END}")
+            f'<div class="grid grid--3">\n' + "\n".join(cards) + f"\n</div>\n{END}")
 
 
 def update_latest_news(posts, changed):
@@ -489,16 +456,19 @@ def page_href(target, current):
     return "../" if target == 1 else f"../{target}/"
 
 
+LIST_START, LIST_END = "<!-- blog-listing:start -->", "<!-- blog-listing:end -->"
+
+
 def listing_nav(n, total):
+    if total < 2:
+        return ""
     links = []
     for k in range(1, total + 1):
         if k == n:
-            links.append(f'<span aria-current="page" class="page-numbers current"><span class="elementor-screen-only">Page</span>{k}</span>')
+            links.append(f'<span aria-current="page"><span class="sr-only">Page </span>{k}</span>')
         else:
-            links.append(f'<a class="page-numbers" href="{page_href(k, n)}"><span class="elementor-screen-only">Page</span>{k}</a>')
-    nxt = f' data-next-page="{page_href(n + 1, n)}"' if n < total else ""
-    return (f'\t\t\t\t<div class="e-load-more-anchor" data-page="{n}" data-max-page="{total}"{nxt}></div>\n'
-            f'\t\t\t\t<nav class="elementor-pagination" aria-label="Pagination">\n\t\t\t' + "\n".join(links) + "\t\t</nav>")
+            links.append(f'<a href="{page_href(k, n)}"><span class="sr-only">Page </span>{k}</a>')
+    return '<nav class="pagination" aria-label="Pagination">' + "".join(links) + "</nav>"
 
 
 def update_listing(posts, changed):
@@ -516,18 +486,15 @@ def update_listing(posts, changed):
             if not template:
                 sys.exit("blog/2/index.html is needed as a template for new blog pages")
             s = open(template, encoding="utf-8").read()
-            s = re.sub(r"\bpaged-\d+ page-paged-\d+", f"paged-{n} page-paged-{n}", s)
+            s = re.sub(r"/blog/2/", f"/blog/{n}/", s)
             os.makedirs(os.path.dirname(path), exist_ok=True)
-        cards = ("<!-- Generated by scripts/update_blog_feeds.py from the blog posts. Do not edit by hand. -->\n"
-                 + NEWS_CSS + "\n" + LISTING_CSS + '\n<div class="llf-news llf-news--listing" role="list">\n'
-                 + "\n".join(news_card(p, prefix, "h2") for p in posts[(n - 1) * PER_PAGE: n * PER_PAGE]) + "\n</div>\n")
-        # the card list runs from the posts container to the load-more anchor + page-number nav after it
-        pat = re.compile(r'(<div class="elementor-posts-container[^>]*>)(.*?)(</div>\s*)'
-                         r'<div class="e-load-more-anchor"[^>]*></div>\s*<nav class="elementor-pagination".*?</nav>', re.S)
-        m = pat.search(s)
-        if not m:
-            sys.exit(f"could not find the posts container in {path}")
-        new = s[:m.start()] + m.group(1).replace(' role="list"', "") + "\n\t\t\t\t" + cards + "\t\t\t\t" + m.group(3).rstrip() + "\n" + listing_nav(n, total) + s[m.end():]
+        block = (f"{LIST_START}\n<!-- Generated by scripts/update_blog_feeds.py from the blog posts. Do not edit by hand. -->\n"
+                 '<div class="grid grid--3">\n'
+                 + "\n".join(news_card(p, prefix, "h2") for p in posts[(n - 1) * PER_PAGE: n * PER_PAGE])
+                 + "\n</div>\n" + listing_nav(n, total) + f"\n{LIST_END}")
+        if LIST_START not in s:
+            sys.exit(f"could not find the {LIST_START} marker in {path}")
+        new = re.sub(re.escape(LIST_START) + r".*?" + re.escape(LIST_END), lambda m: block, s, flags=re.S)
         if new != s:
             changed.append(path)
             open(path, "w", encoding="utf-8").write(new)
