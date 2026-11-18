@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand &amp; Style Guide | The Lackey Law Firm</title>
+<meta name="description" content="The Lackey Law Firm design system: colours, type, spacing, components and a sample page built with the proposed unified stylesheet.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Only the weights actually used. To be self-hosted as woff2 when the site moves over. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Mulish:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/site.js" defer></script>
+<style>
+  /* Style-guide-only presentation (not part of site.css) */
+  .sg-hero { background: var(--c-cream); border-bottom: 1px solid var(--color-border); padding-block: var(--sp-8) var(--sp-7); }
+  .sg-hero h1 { font-size: var(--fs-display); margin-block: var(--sp-3) var(--sp-4); }
+  .sg-toc { position: sticky; top: var(--header-h); z-index: 40; background: rgb(255 255 255 / .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border); }
+  .sg-toc ul { list-style: none; padding-left: 0; display: flex; gap: var(--sp-1); overflow-x: auto; padding-block: var(--sp-2); scrollbar-width: none; }
+  .sg-toc a { display: block; white-space: nowrap; padding: var(--sp-2) var(--sp-3); border-radius: var(--r-pill); font-family: var(--font-heading); font-size: .8125rem; font-weight: var(--fw-bold); color: var(--color-muted); text-decoration: none; }
+  .sg-toc a:hover { background: var(--c-maroon-100); color: var(--c-maroon-700); }
+  .sg-toc a.sg-toc__sample { background: var(--c-maroon-700); color: var(--c-white); }
+  .sg-section { padding-block: var(--sp-8); border-bottom: 1px solid var(--color-border); }
+  .sg-section > .container > h2 { display: flex; align-items: baseline; gap: var(--sp-3); }
+  .sg-num { font-size: .875rem; color: var(--c-gold-700); font-weight: var(--fw-black); }
+  .sg-intro { max-width: 680px; color: var(--color-muted); margin-block: var(--sp-3) var(--sp-6); }
+  .sg-sub { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--color-muted); margin: var(--sp-7) 0 var(--sp-4); }
+  .sg-sub:first-of-type { margin-top: 0; }
+  .sg-swatches { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
+  .sg-swatch { text-align: left; border: 1px solid var(--color-border); border-radius: var(--r-md); overflow: hidden; background: var(--c-white); transition: box-shadow var(--dur); }
+  .sg-swatch:hover { box-shadow: var(--shadow-md); }
+  .sg-swatch__chip { height: 92px; display: flex; align-items: flex-end; justify-content: flex-end; padding: var(--sp-2) var(--sp-3); font-family: var(--font-heading); font-weight: var(--fw-bold); font-size: .75rem; }
+  .sg-swatch__meta { padding: var(--sp-3); font-size: .8125rem; line-height: 1.45; }
+  .sg-swatch__meta strong { display: block; font-family: var(--font-heading); }
+  .sg-swatch__meta code { color: var(--color-muted); }
+  .sg-swatch__copied { color: var(--c-success); font-weight: var(--fw-bold); }
+  .sg-replaces { margin-top: var(--sp-5); font-size: var(--fs-small); color: var(--color-muted); }
+  .sg-replaces span { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin: 0 2px 0 6px; border: 1px solid rgb(0 0 0 / .08); }
+  .sg-type-row { display: grid; gap: var(--sp-2) var(--sp-6); padding-block: var(--sp-5); border-top: 1px solid var(--color-border); align-items: baseline; }
+  @media (min-width: 768px) { .sg-type-row { grid-template-columns: 200px 1fr; } }
+  .sg-type-row code { font-size: .8125rem; color: var(--color-muted); line-height: 1.5; }
+  .sg-type-row code b { display: block; color: var(--c-ink); font-family: var(--font-heading); }
+  .sg-fonts { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); margin-bottom: var(--sp-6); }
+  .sg-font { padding: var(--sp-6); border-radius: var(--r-lg); background: var(--c-cream); }
+  .sg-font__aa { font-size: 4.5rem; line-height: 1; color: var(--c-maroon-700); }
+  .sg-space { display: grid; gap: var(--sp-2); }
+  .sg-space div { display: grid; grid-template-columns: 70px 1fr; gap: var(--sp-4); align-items: center; font-size: .8125rem; color: var(--color-muted); }
+  .sg-space i { display: block; height: 14px; background: var(--c-gold-400); border-radius: 2px; }
+  .sg-shapes { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+  .sg-shape { height: 110px; display: grid; place-items: center; background: var(--c-white); border: 1px solid var(--color-border); font-size: .8125rem; color: var(--color-muted); text-align: center; }
+  .sg-demo { padding: var(--sp-6); border: 1px dashed var(--color-border); border-radius: var(--r-lg); }
+  .sg-demo--dark { background: var(--c-maroon-900); border-color: transparent; }
+  .sg-icons { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+  .sg-icon { display: grid; justify-items: center; gap: var(--sp-2); padding: var(--sp-4) var(--sp-2); border: 1px solid var(--color-border); border-radius: var(--r-md); font-size: .75rem; color: var(--color-muted); }
+  .sg-icon svg { width: 28px; height: 28px; color: var(--c-maroon-700); }
+  .sg-compare { width: 100%; }
+  .sg-compare td:nth-child(2) { color: var(--c-maroon-700); }
+  .sg-compare td:nth-child(3) { color: var(--c-success); font-weight: var(--fw-bold); }
+  .sg-divider { background: var(--c-ink); color: var(--c-white); padding-block: var(--sp-7); text-align: center; }
+  .sg-divider h2 { color: var(--c-white); }
+  .sg-divider p { color: rgb(255 255 255 / .7); max-width: 620px; margin: var(--sp-3) auto 0; }
+</style>
+</head>
+<body>
+
+<!-- ============ Icon sprite (inline SVG, replaces Font Awesome + eicons) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Logo mark redrawn from images/u-logo.png. L uses currentColor so it can reverse to white on dark. -->
+    <symbol id="i-logo" viewBox="0 0 38 37"><path fill="currentColor" d="M0 0h14v23h24v14H0z"/><rect x="18" y="0" width="20" height="19" fill="#e8ad4a"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-4l2-5.2A2 2 0 0 1 6.9 6.5h10.2a2 2 0 0 1 1.9 1.3L21 13v4z"/><path d="M3 13h18M6 17v2M18 17v2"/><circle cx="7.5" cy="15" r=".6"/><circle cx="16.5" cy="15" r=".6"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h13v11H1zM14 9h4l4 4v3h-8z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="17.5" cy="18.5" r="2"/></symbol>
+    <symbol id="i-moto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17l4-6h5l2.5 6M14 11l-1.5-4H16l3 10M9 11 7.5 8H5"/></symbol>
+    <symbol id="i-bike" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></symbol>
+    <symbol id="i-walk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M8 21l3-7 3 3v4M7 12l2.5-4h4l2 4.5M12 8l-1 6"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="15" cy="5.5" r="2"/><circle cx="19" cy="10" r="2"/><path d="M8 17.5c0-3 2-5.5 4.5-5.5s4.5 2.5 4.5 5.5c0 2.3-2.2 2.8-4.5 2.3S8 19.8 8 17.5z"/></symbol>
+    <symbol id="i-hardhat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M4 18v-3a8 8 0 0 1 16 0v3M10 8V5h4v3M9 10V8M15 10V8"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 10h.01M15 10h.01"/></symbol>
+    <symbol id="i-medical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M4 7h16M4 7l-2.5 7a3 3 0 0 0 5 0zM20 7l-2.5 7a3 3 0 0 0 5 0z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21 7 14.2 2 9.3l6.9-1z"/></symbol>
+    <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v8h4v-8h3l1-4h-4V8.5c0-.3.2-.5.5-.5z"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24" fill="currentColor"><path d="M22.5 6.4a2.8 2.8 0 0 0-2-2C18.8 4 12 4 12 4s-6.8 0-8.5.4a2.8 2.8 0 0 0-2 2A29 29 0 0 0 1 12a29 29 0 0 0 .5 5.6 2.8 2.8 0 0 0 2 2c1.7.4 8.5.4 8.5.4s6.8 0 8.5-.4a2.8 2.8 0 0 0 2-2A29 29 0 0 0 23 12a29 29 0 0 0-.5-5.6zM9.8 15.5v-7l5.9 3.5z"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============================ HEADER (component: topbar + site-header) ============================ -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar__offices">
+      <span>Huntsville <a href="tel:+12565852980">(256) 585-2980</a></span>
+      <span>Scottsboro <a href="tel:+12562593929">(256) 259-3929</a></span>
+    </div>
+    <span class="topbar__note">Free consultation · No fee unless we win</span>
+  </div>
+</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="../">
+      <svg class="brand__mark" viewBox="0 0 38 37" aria-hidden="true"><use href="#i-logo"/></svg>
+      <span class="brand__name">The Lackey Law Firm<small>Family-owned since 1981</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <svg class="icon-open"><use href="#i-menu"/></svg><svg class="icon-close"><use href="#i-close"/></svg>
+    </button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="../personal-injury/">Personal Injury</a></li>
+        <li><a class="nav__link" href="../results/">Results</a></li>
+        <li><a class="nav__link" href="../about/">About</a></li>
+        <li><a class="nav__link" href="../areas-we-serve/huntsville-al/">Areas We Serve</a></li>
+        <li><a class="nav__link" href="../blog/">Blog</a></li>
+        <li><a class="nav__link" href="../contact-us/">Contact</a></li>
+        <li class="nav__cta"><a class="btn btn--gold btn--sm" href="tel:+12565852980"><svg><use href="#i-phone"/></svg>Call Now</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ GUIDE INTRO ============================ -->
+<section class="sg-hero">
+  <div class="container">
+    <span class="eyebrow">Design system · v1 proposal</span>
+    <h1>Brand &amp; Style Guide</h1>
+    <p class="lead" style="max-width:720px">One stylesheet, one set of brand tokens, and one small script to replace the ~30 Elementor, theme and plugin files every page loads today. Everything on this page, including the header above and the sample home page below, is built only from <code>tokens.css</code>, <code>site.css</code> and <code>site.js</code>.</p>
+    <div class="table-wrap mt-6" style="max-width:720px">
+      <table class="table sg-compare">
+        <thead><tr><th>Per page</th><th>Today</th><th>This system</th></tr></thead>
+        <tbody>
+          <tr><td>Stylesheets</td><td>~30 (up to 45)</td><td>2 (tokens + site)</td></tr>
+          <tr><td>Own scripts</td><td>~17 incl. jQuery</td><td>1 (≈1.5 KB)</td></tr>
+          <tr><td>Font files requested</td><td>4 families × 18 styles</td><td>2 families, 6 weights</td></tr>
+          <tr><td>Colours in use</td><td>111</td><td>14 tokens</td></tr>
+          <tr><td>Icon fonts</td><td>Font Awesome ×2 + eicons</td><td>Inline SVG sprite</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<nav class="sg-toc" aria-label="Style guide sections">
+  <div class="container">
+    <ul>
+      <li><a href="#colour">Colour</a></li>
+      <li><a href="#type">Typography</a></li>
+      <li><a href="#space">Spacing &amp; shape</a></li>
+      <li><a href="#buttons">Buttons</a></li>
+      <li><a href="#forms">Forms</a></li>
+      <li><a href="#feedback">Badges &amp; notices</a></li>
+      <li><a href="#cards">Cards</a></li>
+      <li><a href="#content">Content blocks</a></li>
+      <li><a href="#icons">Icons</a></li>
+      <li><a class="sg-toc__sample" href="#sample">Sample home page ↓</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================ 01 COLOUR ============================ -->
+<section class="sg-section" id="colour">
+  <div class="container">
+    <h2><span class="sg-num">01</span>Colour</h2>
+    <p class="sg-intro">Maroon leads, gold accents, warm neutrals carry the text. Use the semantic names (<code>--color-primary</code>, <code>--color-text</code> …) in components, never raw hex. Click a swatch to copy its variable.</p>
+
+    <h3 class="sg-sub">Brand · Maroon</h3>
+    <div class="sg-swatches">
+      <button class="sg-swatch" data-copy="var(--c-maroon-900)"><div class="sg-swatch__chip" style="background:var(--c-maroon-900);color:#fff">AAA 18:1</div><div class="sg-swatch__meta"><strong>Maroon 900</strong><code>--c-maroon-900 · #3A0B01</code><br>Header, footer, hero base</div></button>
+      <button class="sg-swatch" data-copy="var(--c-maroon-700)"><div class="sg-swatch__chip" style="background:var(--c-maroon-700);color:#fff">AAA 12:1</div><div class="sg-swatch__meta"><strong>Maroon 700 · Primary</strong><code>--c-maroon-700 · #6F1200</code><br>Buttons, links, key numbers</div></button>
+      <button class="sg-swatch" data-copy="var(--c-maroon-500)"><div class="sg-swatch__chip" style="background:var(--c-maroon-500);color:#fff">AAA 9:1</div><div class="sg-swatch__meta"><strong>Maroon 500</strong><code>--c-maroon-500 · #8C2010</code><br>Hover states</div></button>
+      <button class="sg-swatch" data-copy="var(--c-maroon-100)"><div class="sg-swatch__chip" style="background:var(--c-maroon-100);color:var(--c-maroon-700)">Tint</div><div class="sg-swatch__meta"><strong>Maroon 100</strong><code>--c-maroon-100 · #F6E7E3</code><br>Icon tiles, badges</div></button>
+    </div>
+
+    <h3 class="sg-sub">Brand · Gold</h3>
+    <div class="sg-swatches">
+      <button class="sg-swatch" data-copy="var(--c-gold-400)"><div class="sg-swatch__chip" style="background:var(--c-gold-400);color:var(--c-maroon-900)">On dark only</div><div class="sg-swatch__meta"><strong>Gold 400 · Accent</strong><code>--c-gold-400 · #E8AD4A</code><br>CTAs on dark, rules, highlights</div></button>
+      <button class="sg-swatch" data-copy="var(--c-gold-500)"><div class="sg-swatch__chip" style="background:var(--c-gold-500);color:var(--c-maroon-900)">Decorative</div><div class="sg-swatch__meta"><strong>Gold 500</strong><code>--c-gold-500 · #C8912A</code><br>Icons, borders, stars</div></button>
+      <button class="sg-swatch" data-copy="var(--c-gold-700)"><div class="sg-swatch__chip" style="background:var(--c-gold-700);color:#fff">AA 5.2:1</div><div class="sg-swatch__meta"><strong>Gold 700</strong><code>--c-gold-700 · #8A6629</code><br>Gold <em>text</em> on light (eyebrows, dates)</div></button>
+      <button class="sg-swatch" data-copy="var(--c-gold-100)"><div class="sg-swatch__chip" style="background:var(--c-gold-100);color:var(--c-gold-700)">Tint</div><div class="sg-swatch__meta"><strong>Gold 100</strong><code>--c-gold-100 · #F6EBD3</code><br>Notices, selection</div></button>
+    </div>
+
+    <h3 class="sg-sub">Neutrals</h3>
+    <div class="sg-swatches">
+      <button class="sg-swatch" data-copy="var(--c-ink)"><div class="sg-swatch__chip" style="background:var(--c-ink);color:#fff">Headings</div><div class="sg-swatch__meta"><strong>Ink</strong><code>--c-ink · #16140F</code></div></button>
+      <button class="sg-swatch" data-copy="var(--c-text)"><div class="sg-swatch__chip" style="background:var(--c-text);color:#fff">Body 14:1</div><div class="sg-swatch__meta"><strong>Text</strong><code>--c-text · #2B2B2B</code></div></button>
+      <button class="sg-swatch" data-copy="var(--c-muted)"><div class="sg-swatch__chip" style="background:var(--c-muted);color:#fff">AA 6.3:1</div><div class="sg-swatch__meta"><strong>Muted</strong><code>--c-muted · #5F5F5F</code></div></button>
+      <button class="sg-swatch" data-copy="var(--c-rule)"><div class="sg-swatch__chip" style="background:var(--c-rule)"></div><div class="sg-swatch__meta"><strong>Rule</strong><code>--c-rule · #E6E0D4</code></div></button>
+      <button class="sg-swatch" data-copy="var(--c-cream)"><div class="sg-swatch__chip" style="background:var(--c-cream)"></div><div class="sg-swatch__meta"><strong>Cream</strong><code>--c-cream · #F7F3EC</code><br>Alternate sections</div></button>
+      <button class="sg-swatch" data-copy="var(--c-white)"><div class="sg-swatch__chip" style="background:#fff"></div><div class="sg-swatch__meta"><strong>White</strong><code>--c-white · #FFFFFF</code></div></button>
+    </div>
+
+    <p class="sg-replaces"><strong>Retired:</strong> maroons
+      <span style="background:#6F1400"></span><span style="background:#701601"></span><span style="background:#5A1000"></span><span style="background:#942020"></span><span style="background:#A90707"></span><span style="background:#5F1E1E"></span><span style="background:#800000"></span>
+      → Maroon 700/500 · golds
+      <span style="background:#E9A825"></span><span style="background:#B8860B"></span><span style="background:#D9A441"></span><span style="background:#F0BC45"></span><span style="background:#B8862B"></span><span style="background:#A9803F"></span><span style="background:#C8A44A"></span>
+      → Gold 400/500/700 · Elementor defaults <span style="background:#6EC1E4"></span><span style="background:#61CE70"></span> → removed.</p>
+  </div>
+</section>
+
+<!-- ============================ 02 TYPE ============================ -->
+<section class="sg-section" id="type">
+  <div class="container">
+    <h2><span class="sg-num">02</span>Typography</h2>
+    <p class="sg-intro">Two families. Montserrat for headings, numbers and UI labels; Mulish for reading. Sizes are fluid: they scale smoothly from phone to desktop, so no per-breakpoint overrides are needed.</p>
+    <div class="sg-fonts">
+      <div class="sg-font"><div class="sg-font__aa" style="font-family:var(--font-heading);font-weight:800">Aa</div><h3 class="mt-4">Montserrat</h3><p class="text-muted">Headings · 600 / 700 / 800<br><code>--font-heading</code></p></div>
+      <div class="sg-font"><div class="sg-font__aa" style="font-family:var(--font-body)">Aa</div><h3 class="mt-4" style="font-family:var(--font-body)">Mulish</h3><p class="text-muted">Body &amp; UI · 400 / 600 / 700<br><code>--font-body</code></p></div>
+    </div>
+    <div class="sg-type-row"><code><b>Display</b>--fs-display · 38→64px · 800</code><p style="font-family:var(--font-heading);font-weight:800;font-size:var(--fs-display);line-height:1.1;color:var(--c-ink)">Injured? We fight for you.</p></div>
+    <div class="sg-type-row"><code><b>H1</b>--fs-h1 · 32→48px · 800</code><h1 class="mt-0">Huntsville Personal Injury Lawyers</h1></div>
+    <div class="sg-type-row"><code><b>H2</b>--fs-h2 · 26→36px · 700</code><h2>Practice areas we handle</h2></div>
+    <div class="sg-type-row"><code><b>H3</b>--fs-h3 · 20→24px · 700</code><h3>What to do after a car wreck</h3></div>
+    <div class="sg-type-row"><code><b>H4</b>--fs-h4 · 18px · 700</code><h4>Gather the police report</h4></div>
+    <div class="sg-type-row"><code><b>Eyebrow</b>--fs-eyebrow · 13px · caps</code><span class="eyebrow">Family-owned since 1981</span></div>
+    <div class="sg-type-row"><code><b>Lead</b>--fs-lead · 18→21px</code><p class="lead">For more than 40 years our family has helped North Alabama injury victims recover what they're owed.</p></div>
+    <div class="sg-type-row"><code><b>Body</b>--fs-body · 17px / 1.7</code><p>We investigate what happened, handle the insurance companies, and keep you informed at every step, so you can focus on getting better. <a href="#type">Links are maroon</a> and turn gold on hover.</p></div>
+    <div class="sg-type-row"><code><b>Small</b>--fs-small · 15px</code><p style="font-size:var(--fs-small)" class="text-muted">Captions, card descriptions, footer text and form help.</p></div>
+  </div>
+</section>
+
+<!-- ============================ 03 SPACE ============================ -->
+<section class="sg-section" id="space">
+  <div class="container">
+    <h2><span class="sg-num">03</span>Spacing &amp; shape</h2>
+    <p class="sg-intro">An 8-point scale, three content widths (1140 page · 1280 wide · 760 reading), three breakpoints (≤767 · ≤1024 · ≥1025), four radii and three shadows.</p>
+    <div class="grid grid--2">
+      <div class="sg-space">
+        <div>--sp-1 · 4<i style="width:4px"></i></div>
+        <div>--sp-2 · 8<i style="width:8px"></i></div>
+        <div>--sp-3 · 12<i style="width:12px"></i></div>
+        <div>--sp-4 · 16<i style="width:16px"></i></div>
+        <div>--sp-5 · 24<i style="width:24px"></i></div>
+        <div>--sp-6 · 32<i style="width:32px"></i></div>
+        <div>--sp-7 · 48<i style="width:48px"></i></div>
+        <div>--sp-8 · 64<i style="width:64px"></i></div>
+        <div>--sp-9 · 96<i style="width:96px"></i></div>
+      </div>
+      <div class="sg-shapes">
+        <div class="sg-shape" style="border-radius:var(--r-sm)">--r-sm<br>4px</div>
+        <div class="sg-shape" style="border-radius:var(--r-md)">--r-md<br>8px · inputs</div>
+        <div class="sg-shape" style="border-radius:var(--r-lg)">--r-lg<br>14px · cards</div>
+        <div class="sg-shape" style="border-radius:var(--r-lg);border:0;box-shadow:var(--shadow-sm)">--shadow-sm</div>
+        <div class="sg-shape" style="border-radius:var(--r-lg);border:0;box-shadow:var(--shadow-md)">--shadow-md</div>
+        <div class="sg-shape" style="border-radius:var(--r-lg);border:0;box-shadow:var(--shadow-lg)">--shadow-lg</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 04 BUTTONS ============================ -->
+<section class="sg-section" id="buttons">
+  <div class="container">
+    <h2><span class="sg-num">04</span>Buttons</h2>
+    <p class="sg-intro">Pill-shaped, 48px tall (44px+ touch target). One primary action per view. Gold is reserved for the main call on dark backgrounds.</p>
+    <div class="stack-lg">
+      <div class="sg-demo cluster">
+        <a class="btn btn--primary" href="#buttons">Free Case Review</a>
+        <a class="btn btn--outline" href="#buttons">See Our Results</a>
+        <a class="btn btn--primary btn--sm" href="#buttons">Small</a>
+        <a class="btn btn--primary btn--lg" href="#buttons"><svg><use href="#i-phone"/></svg>Large with icon</a>
+        <a class="btn-link" href="#buttons">Text link</a>
+      </div>
+      <div class="sg-demo sg-demo--dark cluster">
+        <a class="btn btn--gold" href="#buttons"><svg><use href="#i-phone"/></svg>(256) 585-2980</a>
+        <a class="btn btn--light" href="#buttons">Free Case Review</a>
+        <a class="btn btn--gold btn--sm" href="#buttons">Call Now</a>
+      </div>
+      <code class="text-muted" style="font-size:.8125rem">.btn + .btn--primary | --outline | --gold | --light  ·  sizes .btn--sm | --lg | --block  ·  .btn-link</code>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 05 FORMS ============================ -->
+<section class="sg-section" id="forms">
+  <div class="container">
+    <h2><span class="sg-num">05</span>Forms</h2>
+    <p class="sg-intro">Used to restyle the consultation form wrapper. Labels always visible, 48px fields, maroon focus ring.</p>
+    <form class="form" style="max-width:640px" onsubmit="return false">
+      <div class="form__row">
+        <div class="field"><label for="sg-name">Full name</label><input class="input" id="sg-name" placeholder="Jane Smith"></div>
+        <div class="field"><label for="sg-phone">Phone</label><input class="input" id="sg-phone" type="tel" placeholder="(256) 555-0100"></div>
+      </div>
+      <div class="field"><label for="sg-type">Type of case</label>
+        <select class="input" id="sg-type"><option>Car accident</option><option>Truck accident</option><option>Motorcycle accident</option><option>Wrongful death</option><option>Other</option></select></div>
+      <div class="field"><label for="sg-msg">What happened?</label><textarea class="input" id="sg-msg" placeholder="A few details help us call you back prepared."></textarea></div>
+      <div><button class="btn btn--primary" type="submit">Request Free Consultation</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- ============================ 06 FEEDBACK ============================ -->
+<section class="sg-section" id="feedback">
+  <div class="container">
+    <h2><span class="sg-num">06</span>Badges, notices &amp; breadcrumbs</h2>
+    <p class="sg-intro">Small labels for categories and dates; notices for disclaimers and time-sensitive warnings.</p>
+    <div class="stack-lg">
+      <div class="cluster"><span class="badge">Personal Injury</span><span class="badge badge--gold">Case Result</span><span class="badge badge--dark">Featured</span><span class="badge badge--outline">5 min read</span></div>
+      <div class="notice"><svg><use href="#i-info"/></svg><p><strong>Deadlines matter.</strong> In Alabama, many injury claims must be filed within two years. Talk to a lawyer early so evidence can be preserved.</p></div>
+      <div class="notice notice--maroon"><svg><use href="#i-info"/></svg><p>Past results do not guarantee a similar outcome. Every case is different.</p></div>
+      <nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="../">Home</a></li><li><a href="../personal-injury/">Personal Injury</a></li><li><span aria-current="page">Dog Bite Lawyer</span></li></ol></nav>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 07 CARDS ============================ -->
+<section class="sg-section" id="cards">
+  <div class="container">
+    <h2><span class="sg-num">07</span>Cards</h2>
+    <p class="sg-intro">Every card shares one radius, one border and one hover lift. The whole card is the click target.</p>
+    <div class="grid grid--4" style="align-items:start">
+      <article class="card card--link"><div class="card__icon"><svg><use href="#i-truck"/></svg></div><h3>Practice area</h3><p><code>.card.card--link</code> with icon tile.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="#cards" aria-label="Practice area"></a></article>
+      <div class="result"><div class="result__amount">$5.25M</div><div class="result__type">Result card</div><p><code>.result</code></p></div>
+      <figure class="review"><div class="stars" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote>Review card, <code>.review</code></blockquote><figcaption><span class="avatar">R</span><span><strong>Reviewer</strong>Google review</span></figcaption></figure>
+      <article class="post-card"><div class="post-card__img"><img src="../images/b-biggest-mistakes-injury.jpg" alt="" loading="lazy" width="640" height="360"></div><div class="post-card__body"><time>Blog card</time><h3><a href="#cards">.post-card</a></h3></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 08 CONTENT ============================ -->
+<section class="sg-section" id="content">
+  <div class="container">
+    <h2><span class="sg-num">08</span>Content blocks</h2>
+    <p class="sg-intro">Accordion (native <code>&lt;details&gt;</code>, works without JavaScript), process steps, data table, and the <code>.prose</code> style used for blog posts and long practice-area copy.</p>
+    <div class="grid grid--2" style="align-items:start">
+      <div class="stack-lg">
+        <div class="accordion">
+          <details open><summary>Accordion item, open</summary><div class="accordion__body"><p>Answers sit in muted body text. The + rotates to × when open.</p></div></details>
+          <details><summary>Accordion item, closed</summary><div class="accordion__body"><p>Hidden until opened.</p></div></details>
+        </div>
+        <div class="steps">
+          <div class="step"><div><h3>Step heading</h3><p>Numbered automatically with CSS counters.</p></div></div>
+          <div class="step"><div><h3>Second step</h3><p>No icon fonts, no JS.</p></div></div>
+        </div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Claim</th><th>Typical deadline (AL)</th></tr></thead><tbody><tr><td>Personal injury</td><td>2 years</td></tr><tr><td>Wrongful death</td><td>2 years</td></tr><tr><td>Property damage</td><td>6 years</td></tr></tbody></table></div>
+      </div>
+      <article class="prose">
+        <h2 class="mt-0">Prose: an H2 section</h2>
+        <p>Body copy is set at 17px with a 1.7 line height and a 760px measure, the same as the current universal blog layout, now driven by tokens.</p>
+        <h3>An H3 subsection is maroon</h3>
+        <ul><li>Lists get gold markers</li><li>Spacing comes from one rhythm</li></ul>
+        <blockquote>Pull quotes use a gold rule and italic Mulish.</blockquote>
+        <p>Links like <a href="#content">this one</a> are maroon and semibold, with no underline.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 09 ICONS ============================ -->
+<section class="sg-section" id="icons">
+  <div class="container">
+    <h2><span class="sg-num">09</span>Icons</h2>
+    <p class="sg-intro">One inline SVG sprite (~5 KB) replaces Font Awesome (loaded twice today) and Elementor's eicons. Use: <code>&lt;svg&gt;&lt;use href="#i-car"/&gt;&lt;/svg&gt;</code>. Icons inherit the text colour.</p>
+    <div class="sg-icons">
+      <div class="sg-icon"><svg><use href="#i-car"/></svg>i-car</div>
+      <div class="sg-icon"><svg><use href="#i-truck"/></svg>i-truck</div>
+      <div class="sg-icon"><svg><use href="#i-moto"/></svg>i-moto</div>
+      <div class="sg-icon"><svg><use href="#i-bike"/></svg>i-bike</div>
+      <div class="sg-icon"><svg><use href="#i-walk"/></svg>i-walk</div>
+      <div class="sg-icon"><svg><use href="#i-paw"/></svg>i-paw</div>
+      <div class="sg-icon"><svg><use href="#i-hardhat"/></svg>i-hardhat</div>
+      <div class="sg-icon"><svg><use href="#i-building"/></svg>i-building</div>
+      <div class="sg-icon"><svg><use href="#i-medical"/></svg>i-medical</div>
+      <div class="sg-icon"><svg><use href="#i-shield"/></svg>i-shield</div>
+      <div class="sg-icon"><svg><use href="#i-scale"/></svg>i-scale</div>
+      <div class="sg-icon"><svg><use href="#i-heart"/></svg>i-heart</div>
+      <div class="sg-icon"><svg><use href="#i-phone"/></svg>i-phone</div>
+      <div class="sg-icon"><svg><use href="#i-mail"/></svg>i-mail</div>
+      <div class="sg-icon"><svg><use href="#i-pin"/></svg>i-pin</div>
+      <div class="sg-icon"><svg><use href="#i-calendar"/></svg>i-calendar</div>
+      <div class="sg-icon"><svg><use href="#i-check"/></svg>i-check</div>
+      <div class="sg-icon"><svg><use href="#i-info"/></svg>i-info</div>
+      <div class="sg-icon"><svg><use href="#i-star"/></svg>i-star</div>
+      <div class="sg-icon"><svg viewBox="0 0 38 37"><use href="#i-logo"/></svg>i-logo</div>
+      <div class="sg-icon"><svg><use href="#i-facebook"/></svg>i-facebook</div>
+      <div class="sg-icon"><svg><use href="#i-youtube"/></svg>i-youtube</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SAMPLE HOME PAGE: a complete redesign built only from the system
+     ===================================================================== -->
+<div class="sg-divider" id="sample">
+  <div class="container">
+    <span class="eyebrow">Sample</span>
+    <h2 class="mt-4">The new home page</h2>
+    <p>A proposed redesign of the home page using only the components above. The header at the top and the footer at the bottom of this page are part of it.</p>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <img class="hero__bg" src="../images/u-hero-background.jpg" alt="" fetchpriority="high">
+  <div class="container container--wide">
+    <div>
+      <span class="eyebrow">Huntsville &amp; Scottsboro Injury Lawyers</span>
+      <h1>Hurt in a wreck? <em>Our family</em> will fight for yours.</h1>
+      <p class="lead">For more than 40 years The Lackey Law Firm has helped North Alabama injury victims take on the insurance companies and recover what they're owed. Over $70 million recovered.</p>
+      <div class="hero__actions cluster">
+        <a class="btn btn--gold btn--lg" href="tel:+12565852980"><svg><use href="#i-phone"/></svg>(256) 585-2980</a>
+        <a class="btn btn--light btn--lg" href="#consult">Free Case Review</a>
+      </div>
+      <div class="hero__trust">
+        <span><svg><use href="#i-check"/></svg>No fee unless we win</span>
+        <span><svg><use href="#i-check"/></svg>Free consultation</span>
+        <span><svg><use href="#i-star"/></svg>200+ five-star Google reviews</span>
+      </div>
+    </div>
+    <div class="panel" id="consult">
+      <h2 style="font-size:1.4rem">Get your free case review</h2>
+      <p class="text-muted mt-4" style="font-size:var(--fs-small)">Tell us what happened. An attorney will call you back, usually the same day.</p>
+      <form class="form mt-6" onsubmit="return false">
+        <div class="field"><label for="h-name">Name</label><input class="input" id="h-name" autocomplete="name"></div>
+        <div class="field"><label for="h-phone">Phone</label><input class="input" id="h-phone" type="tel" autocomplete="tel"></div>
+        <div class="field"><label for="h-type">Type of case</label><select class="input" id="h-type"><option>Car accident</option><option>18-wheeler accident</option><option>Motorcycle accident</option><option>Wrongful death</option><option>Other injury</option></select></div>
+        <button class="btn btn--primary btn--block" type="submit">Request My Free Review</button>
+      </form>
+      <p class="panel__note">Demo form. On the live site the JotForm embed sits in this panel, loaded on demand.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="stats">
+      <div class="stat reveal"><span class="stat__value">$70M+</span><span class="stat__label">Recovered for our clients</span></div>
+      <div class="stat reveal"><span class="stat__value">40+ yrs</span><span class="stat__label">Serving North Alabama since 1981</span></div>
+      <div class="stat reveal"><span class="stat__value">200+</span><span class="stat__label">Five-star Google reviews</span></div>
+      <div class="stat reveal"><span class="stat__value">$0</span><span class="stat__label">Upfront. No fee unless we win.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Awards -->
+<section class="section--tight" style="padding-top:0">
+  <div class="container">
+    <div class="awards">
+      <img src="../images/h-awards-av-preeminent-rated-4.png" alt="Martindale-Hubbell AV Preeminent" loading="lazy">
+      <img src="../images/h-awards-national-top-100-3.png" alt="National Trial Lawyers Top 100" loading="lazy">
+      <img src="../images/h-awards-lawyers-of-distinction-2.jpg" alt="Lawyers of Distinction" loading="lazy">
+      <img src="../images/h-awards-client-reviewed-5.png" alt="Martindale-Hubbell Client Reviewed" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- Practice areas -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow">How we help</span>
+      <h2>Injury cases we handle</h2>
+      <p class="lead">From everyday wrecks to catastrophic losses, we handle the investigation, the insurers and, if needed, the courtroom.</p>
+    </div>
+    <div class="grid grid--4">
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-car"/></svg></div><h3>Car Accidents</h3><p>Medical bills, lost wages and pain from a wreck that wasn't your fault.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../auto-accidents/" aria-label="Car accidents"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-truck"/></svg></div><h3>18-Wheeler Wrecks</h3><p>Commercial trucking cases with multiple insurers and federal rules.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../18-wheeler-wrecks/" aria-label="18-wheeler wrecks"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-moto"/></svg></div><h3>Motorcycle Accidents</h3><p>Fighting the bias riders face from insurers and juries.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../motorcycle-accidents/" aria-label="Motorcycle accidents"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-heart"/></svg></div><h3>Wrongful Death</h3><p>Compassionate help for families after a preventable loss.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../wrongful-death/" aria-label="Wrongful death"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-bike"/></svg></div><h3>Bicycle Accidents</h3><p>Cyclists hit by drivers on Huntsville-area roads.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../bicycle-accident-attorney/" aria-label="Bicycle accidents"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-walk"/></svg></div><h3>Pedestrian Accidents</h3><p>Serious injuries to people on foot, in crosswalks and lots.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../pedestrian-accident-lawyer/" aria-label="Pedestrian accidents"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-paw"/></svg></div><h3>Dog Bites</h3><p>Bites and attacks under Alabama's dog-owner liability rules.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../dog-bite-lawyer/" aria-label="Dog bites"></a></article>
+      <article class="card card--link reveal"><div class="card__icon"><svg><use href="#i-shield"/></svg></div><h3>Uninsured Motorist</h3><p>When the at-fault driver has little or no insurance.</p><span class="btn-link card__more">Learn more</span><a class="card__cover" href="../uninsured-underinsured-motorist-attorney/" aria-label="Uninsured motorist"></a></article>
+    </div>
+    <p class="text-center mt-7"><a class="btn btn--outline" href="../personal-injury/">All Practice Areas</a></p>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section section--dark">
+  <div class="container">
+    <div class="split">
+      <div class="section-head" style="margin-bottom:0">
+        <span class="eyebrow">What to expect</span>
+        <h2>We take it from here</h2>
+        <p class="lead">You've been through enough. Our job is to make the legal side simple, and to keep you informed at every step.</p>
+        <p><a class="btn btn--gold mt-4" href="tel:+12565852980"><svg><use href="#i-phone"/></svg>Talk to a Lawyer Today</a></p>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><div><h3>Free consultation</h3><p>Tell us what happened. We'll explain your options in plain language, at no cost.</p></div></div>
+        <div class="step reveal"><div><h3>We investigate</h3><p>We gather reports, records and evidence, and deal with the insurance companies for you.</p></div></div>
+        <div class="step reveal"><div><h3>We build your claim</h3><p>We document every loss, from medical bills to lost wages and pain and suffering.</p></div></div>
+        <div class="step reveal"><div><h3>We fight for the result</h3><p>We negotiate hard and are ready to go to trial. You pay nothing unless we win.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Attorneys -->
+<section class="section">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow">Meet the family</span>
+      <h2>Your attorneys</h2>
+      <p class="lead">When you hire The Lackey Law Firm, you work directly with a Lackey.</p>
+    </div>
+    <div class="grid grid--3">
+      <article class="person reveal"><div class="person__photo"><img src="../images/l-gary-profile.jpg" alt="Gary Lackey" loading="lazy" width="400" height="515"></div><div class="person__body"><span class="person__role">Founding Attorney</span><h3><a href="../gary-lackey/">Gary Lackey</a></h3><p class="text-muted" style="font-size:var(--fs-small)">Representing North Alabama clients for more than four decades.</p></div></article>
+      <article class="person reveal"><div class="person__photo"><img src="../images/l-justin-profile.jpg" alt="Justin Lackey" loading="lazy" width="400" height="500"></div><div class="person__body"><span class="person__role">Attorney</span><h3><a href="../justin-lackey/">Justin Lackey</a></h3><p class="text-muted" style="font-size:var(--fs-small)">Personal injury trial lawyer, practising since 2009.</p></div></article>
+      <article class="person reveal"><div class="person__photo"><img src="../images/l-jennifer-profile.jpg" alt="Jennifer Lackey" loading="lazy" width="400" height="555"></div><div class="person__body"><span class="person__role">Attorney</span><h3><a href="../jennifer-lackey/">Jennifer Lackey</a></h3><p class="text-muted" style="font-size:var(--fs-small)">Named one of America's Top 100 personal injury lawyers.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Case results</span>
+      <h2>Results that change lives</h2>
+    </div>
+    <div class="grid grid--4">
+      <div class="result reveal"><div class="result__amount">$5,250,000</div><div class="result__type">Commercial vehicle wreck</div><p>Settlement</p></div>
+      <div class="result reveal"><div class="result__amount">$1,400,000</div><div class="result__type">Car wreck, severe injuries</div><p>Settlement</p></div>
+      <div class="result reveal"><div class="result__amount">$725,000</div><div class="result__type">Rear-end collision</div><p>Settlement</p></div>
+      <div class="result reveal"><div class="result__amount">$595,000</div><div class="result__type">Commercial vehicle wreck</div><p>Settlement</p></div>
+    </div>
+    <div class="cluster mt-6" style="justify-content:space-between">
+      <p class="disclaimer">Past results do not guarantee a similar outcome. Every case is different.</p>
+      <a class="btn-link" href="../results/">See all results</a>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section class="section">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow">Client reviews</span>
+      <h2>What our clients say</h2>
+    </div>
+    <div class="grid grid--3">
+      <figure class="review reveal"><div class="stars" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote>“Jennifer Lackey is a gem. So thankful for all she did for us. She really knows her stuff.”</blockquote><figcaption><span class="avatar">R</span><span><strong>Regina Houser</strong>Google review</span></figcaption></figure>
+      <figure class="review reveal"><div class="stars" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote>“Mr. Lackey did an amazing job with my husband's case. He is down to earth, straight forward, hard working, and a great attorney. I highly recommend!”</blockquote><figcaption><span class="avatar">A</span><span><strong>Amy Hagerman</strong>Google review</span></figcaption></figure>
+      <figure class="review reveal"><div class="stars" aria-label="5 out of 5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote>“I couldn't have chosen a better team of people, they are down to earth and will fight for you! Thank you Lackey Law Firm.”</blockquote><figcaption><span class="avatar">J</span><span><strong>Jared Lewis</strong>Google review</span></figcaption></figure>
+    </div>
+    <p class="text-center mt-6 text-muted" style="font-size:var(--fs-small)">The live Trustindex widget would load here when scrolled into view.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section--alt">
+  <div class="container container--read">
+    <div class="section-head section-head--center">
+      <span class="eyebrow">Questions</span>
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="accordion">
+      <details><summary>How much does it cost to talk to a lawyer?</summary><div class="accordion__body"><p>Nothing. The first consultation is free, and for accepted personal injury cases you pay no attorney's fee unless we recover money for you. Your written fee agreement explains how case expenses are handled.</p></div></details>
+      <details><summary>How long do I have to file an injury claim in Alabama?</summary><div class="accordion__body"><p>Many Alabama personal injury claims must be filed within two years, but some deadlines are shorter. Contact us as soon as you can so we can check the deadline for your situation and preserve evidence.</p></div></details>
+      <details><summary>Should I talk to the other driver's insurance company?</summary><div class="accordion__body"><p>It's best to speak with a lawyer before giving a recorded statement. Insurers may use what you say to reduce or deny your claim.</p></div></details>
+      <details><summary>Where are your offices?</summary><div class="accordion__body"><p>We have offices in Huntsville and Scottsboro and help clients throughout North Alabama, including Madison, Decatur and Athens.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- Latest news -->
+<section class="section">
+  <div class="container">
+    <div class="cluster" style="justify-content:space-between;margin-bottom:var(--sp-7)">
+      <div class="section-head" style="margin-bottom:0"><span class="eyebrow">From the blog</span><h2>Latest news &amp; guides</h2></div>
+      <a class="btn btn--outline" href="../blog/">All Articles</a>
+    </div>
+    <div class="grid grid--3">
+      <article class="post-card reveal"><div class="post-card__img"><img src="../images/b-common-injuries.jpg" alt="" loading="lazy" width="640" height="360"></div><div class="post-card__body"><time datetime="2026-05-17">May 17, 2026</time><h3><a href="../construction-accidents-in-huntsville-al-common-injuries-and-legal-options/">Construction Accidents in Huntsville, AL: Common Injuries and Legal Options</a></h3><span class="btn-link">Read more</span></div></article>
+      <article class="post-card reveal"><div class="post-card__img"><img src="../images/b-biggest-mistakes-injury.jpg" alt="" loading="lazy" width="640" height="360"></div><div class="post-card__body"><time datetime="2024-09-24">Sep 24, 2024</time><h3><a href="../what-are-the-biggest-mistakes-people-make-after-getting-injured/">What Are the Biggest Mistakes People Make After Getting Injured?</a></h3><span class="btn-link">Read more</span></div></article>
+      <article class="post-card reveal"><div class="post-card__img"><img src="../images/b-5-easy-steps.jpg" alt="" loading="lazy" width="640" height="360"></div><div class="post-card__body"><time datetime="2020-07-06">Jul 6, 2020</time><h3><a href="../attorney-jennifer-lackey-settles-limestone-county-wreck-for-75000/">Attorney Jennifer Lackey Settles Limestone County Wreck for $75,000</a></h3><span class="btn-link">Read more</span></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <span class="eyebrow">Free consultation</span>
+        <h2 class="mt-4">Talk to a Lackey today</h2>
+        <p class="mt-4">No fee unless we win. Call now or send us your details and we'll call you back.</p>
+      </div>
+      <div class="cluster">
+        <a class="btn btn--gold btn--lg" href="tel:+12565852980"><svg><use href="#i-phone"/></svg>(256) 585-2980</a>
+        <a class="btn btn--light btn--lg" href="../contact-us/">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="stack">
+        <a class="brand" href="../"><svg class="brand__mark" viewBox="0 0 38 37" aria-hidden="true"><use href="#i-logo"/></svg><span class="brand__name">The Lackey Law Firm<small>Family-owned since 1981</small></span></a>
+        <p>Personal injury lawyers serving Huntsville, Scottsboro and all of North Alabama.</p>
+        <div class="social"><a href="https://www.facebook.com/lackeylawfirm/" aria-label="Facebook"><svg><use href="#i-facebook"/></svg></a><a href="https://www.youtube.com/@thelackeylawfirm" aria-label="YouTube"><svg><use href="#i-youtube"/></svg></a></div>
+      </div>
+      <div>
+        <h2>Huntsville Office</h2>
+        <p>1111 Wayne Road NW, Suite 7<br>Huntsville, AL 35806<br><a href="tel:+12565852980">(256) 585-2980</a></p>
+      </div>
+      <div>
+        <h2>Scottsboro Office</h2>
+        <p>126 East Peachtree Street<br>Scottsboro, AL 35768<br><a href="tel:+12562593929">(256) 259-3929</a></p>
+      </div>
+      <div>
+        <h2>Explore</h2>
+        <ul class="footer-links">
+          <li><a href="../personal-injury/">Personal Injury</a></li>
+          <li><a href="../results/">Case Results</a></li>
+          <li><a href="../about/">About the Firm</a></li>
+          <li><a href="../blog/">Blog</a></li>
+          <li><a href="../contact-us/">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 The Lackey Law Firm. No representation is made that the quality of legal services to be performed is greater than the quality of legal services performed by other lawyers.</span>
+      <span><a href="../privacy-policy/">Privacy</a> · <a href="../terms-conditions/">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="callbar">
+  <a class="btn btn--gold" href="tel:+12565852980"><svg><use href="#i-phone"/></svg>Call Now</a>
+  <a class="btn btn--light" href="#consult">Free Review</a>
+</div>
+
+<script>
+  // Style guide only: click a swatch to copy its CSS variable
+  document.querySelectorAll('.sg-swatch').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var v = b.dataset.copy, meta = b.querySelector('strong');
+      if (navigator.clipboard) navigator.clipboard.writeText(v).then(function () {
+        var t = meta.textContent; meta.innerHTML = '<span class="sg-swatch__copied">Copied ' + v + '</span>';
+        setTimeout(function () { meta.textContent = t; }, 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>
