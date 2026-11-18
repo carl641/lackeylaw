@@ -27,7 +27,7 @@
   .sg-section > .container > h2 { display: flex; align-items: baseline; gap: var(--sp-3); }
   .sg-num { font-size: .875rem; color: var(--c-gold-700); font-weight: var(--fw-black); }
   .sg-intro { max-width: 680px; color: var(--color-muted); margin-block: var(--sp-3) var(--sp-6); }
-  .sg-sub { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--color-muted); margin: var(--sp-7) 0 var(--sp-4); }
+  .sg-sub { font-size: var(--fs-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--color-muted); margin: var(--sp-7) 0 var(--sp-4); }
   .sg-sub:first-of-type { margin-top: 0; }
   .sg-swatches { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
   .sg-swatch { text-align: left; border: 1px solid var(--color-border); border-radius: var(--r-md); overflow: hidden; background: var(--c-white); transition: box-shadow var(--dur); }
@@ -60,6 +60,7 @@
   .sg-compare td:nth-child(2) { color: var(--c-maroon-700); }
   .sg-compare td:nth-child(3) { color: var(--c-success); font-weight: var(--fw-bold); }
   .sg-divider { background: var(--c-ink); color: var(--c-white); padding-block: var(--sp-7); text-align: center; }
+  .sg-divider .mark { margin-inline: auto; }
   .sg-divider h2 { color: var(--c-white); }
   .sg-divider p { color: rgb(255 255 255 / .7); max-width: 620px; margin: var(--sp-3) auto 0; }
 </style>
@@ -69,8 +70,8 @@
 <!-- ============ Icon sprite (inline SVG, replaces Font Awesome + eicons) ============ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Logo mark redrawn from images/u-logo.png. L uses currentColor so it can reverse to white on dark. -->
-    <symbol id="i-logo" viewBox="0 0 38 37"><path fill="currentColor" d="M0 0h14v23h24v14H0z"/><rect x="18" y="0" width="20" height="19" fill="#e8ad4a"/></symbol>
+    <!-- Section mark: the L-and-square block from images/u-logo.png, same proportions and colours -->
+    <symbol id="i-logo" viewBox="0 0 46 45"><rect width="46" height="45" rx="1" fill="#fff"/><path fill="#6f1400" d="M4 4h14.5v22.5H41V41H4z"/><rect x="23" y="4" width="18" height="18" fill="#e8a713"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
     <symbol id="i-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-4l2-5.2A2 2 0 0 1 6.9 6.5h10.2a2 2 0 0 1 1.9 1.3L21 13v4z"/><path d="M3 13h18M6 17v2M18 17v2"/><circle cx="7.5" cy="15" r=".6"/><circle cx="16.5" cy="15" r=".6"/></symbol>
     <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h13v11H1zM14 9h4l4 4v3h-8z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="17.5" cy="18.5" r="2"/></symbol>
@@ -112,8 +113,7 @@
 <header class="site-header">
   <div class="container">
     <a class="brand" href="../">
-      <svg class="brand__mark" viewBox="0 0 38 37" aria-hidden="true"><use href="#i-logo"/></svg>
-      <span class="brand__name">The Lackey Law Firm<small>Family-owned since 1981</small></span>
+      <img src="../images/u-logo.png" alt="The Lackey Law Firm" width="184" height="92">
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
       <svg class="icon-open"><use href="#i-menu"/></svg><svg class="icon-close"><use href="#i-close"/></svg>
@@ -137,7 +137,7 @@
 <!-- ============================ GUIDE INTRO ============================ -->
 <section class="sg-hero">
   <div class="container">
-    <span class="eyebrow">Design system · v1 proposal</span>
+    <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
     <h1>Brand &amp; Style Guide</h1>
     <p class="lead" style="max-width:720px">One stylesheet, one set of brand tokens, and one small script to replace the ~30 Elementor, theme and plugin files every page loads today. Everything on this page, including the header above and the sample home page below, is built only from <code>tokens.css</code>, <code>site.css</code> and <code>site.js</code>.</p>
     <div class="table-wrap mt-6" style="max-width:720px">
@@ -176,21 +176,21 @@
 <section class="sg-section" id="colour">
   <div class="container">
     <h2><span class="sg-num">01</span>Colour</h2>
-    <p class="sg-intro">Maroon leads, gold accents, warm neutrals carry the text. Use the semantic names (<code>--color-primary</code>, <code>--color-text</code> …) in components, never raw hex. Click a swatch to copy its variable.</p>
+    <p class="sg-intro">Maroon leads, gold accents, warm neutrals carry the text. The two brand colours are taken directly from the logo. Use the semantic names (<code>--color-primary</code>, <code>--color-text</code> …) in components, never raw hex. Click a swatch to copy its variable.</p>
 
     <h3 class="sg-sub">Brand · Maroon</h3>
     <div class="sg-swatches">
       <button class="sg-swatch" data-copy="var(--c-maroon-900)"><div class="sg-swatch__chip" style="background:var(--c-maroon-900);color:#fff">AAA 18:1</div><div class="sg-swatch__meta"><strong>Maroon 900</strong><code>--c-maroon-900 · #3A0B01</code><br>Header, footer, hero base</div></button>
-      <button class="sg-swatch" data-copy="var(--c-maroon-700)"><div class="sg-swatch__chip" style="background:var(--c-maroon-700);color:#fff">AAA 12:1</div><div class="sg-swatch__meta"><strong>Maroon 700 · Primary</strong><code>--c-maroon-700 · #6F1200</code><br>Buttons, links, key numbers</div></button>
+      <button class="sg-swatch" data-copy="var(--c-maroon-700)"><div class="sg-swatch__chip" style="background:var(--c-maroon-700);color:#fff">AAA 12:1</div><div class="sg-swatch__meta"><strong>Maroon 700 · Primary (logo)</strong><code>--c-maroon-700 · #6F1400</code><br>Buttons, links, key numbers</div></button>
       <button class="sg-swatch" data-copy="var(--c-maroon-500)"><div class="sg-swatch__chip" style="background:var(--c-maroon-500);color:#fff">AAA 9:1</div><div class="sg-swatch__meta"><strong>Maroon 500</strong><code>--c-maroon-500 · #8C2010</code><br>Hover states</div></button>
       <button class="sg-swatch" data-copy="var(--c-maroon-100)"><div class="sg-swatch__chip" style="background:var(--c-maroon-100);color:var(--c-maroon-700)">Tint</div><div class="sg-swatch__meta"><strong>Maroon 100</strong><code>--c-maroon-100 · #F6E7E3</code><br>Icon tiles, badges</div></button>
     </div>
 
     <h3 class="sg-sub">Brand · Gold</h3>
     <div class="sg-swatches">
-      <button class="sg-swatch" data-copy="var(--c-gold-400)"><div class="sg-swatch__chip" style="background:var(--c-gold-400);color:var(--c-maroon-900)">On dark only</div><div class="sg-swatch__meta"><strong>Gold 400 · Accent</strong><code>--c-gold-400 · #E8AD4A</code><br>CTAs on dark, rules, highlights</div></button>
+      <button class="sg-swatch" data-copy="var(--c-gold-400)"><div class="sg-swatch__chip" style="background:var(--c-gold-400);color:var(--c-maroon-900)">On dark only</div><div class="sg-swatch__meta"><strong>Gold 400 · Accent (logo)</strong><code>--c-gold-400 · #E8A713</code><br>CTAs on dark, rules, highlights</div></button>
       <button class="sg-swatch" data-copy="var(--c-gold-500)"><div class="sg-swatch__chip" style="background:var(--c-gold-500);color:var(--c-maroon-900)">Decorative</div><div class="sg-swatch__meta"><strong>Gold 500</strong><code>--c-gold-500 · #C8912A</code><br>Icons, borders, stars</div></button>
-      <button class="sg-swatch" data-copy="var(--c-gold-700)"><div class="sg-swatch__chip" style="background:var(--c-gold-700);color:#fff">AA 5.2:1</div><div class="sg-swatch__meta"><strong>Gold 700</strong><code>--c-gold-700 · #8A6629</code><br>Gold <em>text</em> on light (eyebrows, dates)</div></button>
+      <button class="sg-swatch" data-copy="var(--c-gold-700)"><div class="sg-swatch__chip" style="background:var(--c-gold-700);color:#fff">AA 5.2:1</div><div class="sg-swatch__meta"><strong>Gold 700</strong><code>--c-gold-700 · #8A6629</code><br>Gold <em>text</em> on light (labels, dates)</div></button>
       <button class="sg-swatch" data-copy="var(--c-gold-100)"><div class="sg-swatch__chip" style="background:var(--c-gold-100);color:var(--c-gold-700)">Tint</div><div class="sg-swatch__meta"><strong>Gold 100</strong><code>--c-gold-100 · #F6EBD3</code><br>Notices, selection</div></button>
     </div>
 
@@ -205,9 +205,9 @@
     </div>
 
     <p class="sg-replaces"><strong>Retired:</strong> maroons
-      <span style="background:#6F1400"></span><span style="background:#701601"></span><span style="background:#5A1000"></span><span style="background:#942020"></span><span style="background:#A90707"></span><span style="background:#5F1E1E"></span><span style="background:#800000"></span>
+      <span style="background:#6F1200"></span><span style="background:#701601"></span><span style="background:#5A1000"></span><span style="background:#942020"></span><span style="background:#A90707"></span><span style="background:#5F1E1E"></span><span style="background:#800000"></span>
       → Maroon 700/500 · golds
-      <span style="background:#E9A825"></span><span style="background:#B8860B"></span><span style="background:#D9A441"></span><span style="background:#F0BC45"></span><span style="background:#B8862B"></span><span style="background:#A9803F"></span><span style="background:#C8A44A"></span>
+      <span style="background:#E8AD4A"></span><span style="background:#E9A825"></span><span style="background:#B8860B"></span><span style="background:#D9A441"></span><span style="background:#F0BC45"></span><span style="background:#B8862B"></span><span style="background:#A9803F"></span><span style="background:#C8A44A"></span>
       → Gold 400/500/700 · Elementor defaults <span style="background:#6EC1E4"></span><span style="background:#61CE70"></span> → removed.</p>
   </div>
 </section>
@@ -226,7 +226,7 @@
     <div class="sg-type-row"><code><b>H2</b>--fs-h2 · 26→36px · 700</code><h2>Practice areas we handle</h2></div>
     <div class="sg-type-row"><code><b>H3</b>--fs-h3 · 20→24px · 700</code><h3>What to do after a car wreck</h3></div>
     <div class="sg-type-row"><code><b>H4</b>--fs-h4 · 18px · 700</code><h4>Gather the police report</h4></div>
-    <div class="sg-type-row"><code><b>Eyebrow</b>--fs-eyebrow · 13px · caps</code><span class="eyebrow">Family-owned since 1981</span></div>
+    <div class="sg-type-row"><code><b>Section mark</b>.mark · 36px (--sm 26 · --lg 48)</code><div><svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg><p class="text-muted mt-4" style="font-size:var(--fs-small)">The logo's block (white tile, maroon L, gold square) sits above section headings in place of eyebrow labels. Same proportions and colours as the logo; never recoloured or stretched. On light backgrounds the white tile blends in; on dark it shows, exactly as in the logo.</p></div></div>
     <div class="sg-type-row"><code><b>Lead</b>--fs-lead · 18→21px</code><p class="lead">For more than 40 years our family has helped North Alabama injury victims recover what they're owed.</p></div>
     <div class="sg-type-row"><code><b>Body</b>--fs-body · 17px / 1.7</code><p>We investigate what happened, handle the insurance companies, and keep you informed at every step, so you can focus on getting better. <a href="#type">Links are maroon</a> and turn gold on hover.</p></div>
     <div class="sg-type-row"><code><b>Small</b>--fs-small · 15px</code><p style="font-size:var(--fs-small)" class="text-muted">Captions, card descriptions, footer text and form help.</p></div>
@@ -385,7 +385,7 @@
       <div class="sg-icon"><svg><use href="#i-check"/></svg>i-check</div>
       <div class="sg-icon"><svg><use href="#i-info"/></svg>i-info</div>
       <div class="sg-icon"><svg><use href="#i-star"/></svg>i-star</div>
-      <div class="sg-icon"><svg viewBox="0 0 38 37"><use href="#i-logo"/></svg>i-logo</div>
+      <div class="sg-icon"><svg viewBox="0 0 46 45"><use href="#i-logo"/></svg>i-logo (mark)</div>
       <div class="sg-icon"><svg><use href="#i-facebook"/></svg>i-facebook</div>
       <div class="sg-icon"><svg><use href="#i-youtube"/></svg>i-youtube</div>
     </div>
@@ -397,7 +397,7 @@
      ===================================================================== -->
 <div class="sg-divider" id="sample">
   <div class="container">
-    <span class="eyebrow">Sample</span>
+    <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
     <h2 class="mt-4">The new home page</h2>
     <p>A proposed redesign of the home page using only the components above. The header at the top and the footer at the bottom of this page are part of it.</p>
   </div>
@@ -408,7 +408,7 @@
   <img class="hero__bg" src="../images/u-hero-background.jpg" alt="" fetchpriority="high">
   <div class="container container--wide">
     <div>
-      <span class="eyebrow">Huntsville &amp; Scottsboro Injury Lawyers</span>
+      <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
       <h1>Hurt in a wreck? <em>Our family</em> will fight for yours.</h1>
       <p class="lead">For more than 40 years The Lackey Law Firm has helped North Alabama injury victims take on the insurance companies and recover what they're owed. Over $70 million recovered.</p>
       <div class="hero__actions cluster">
@@ -463,7 +463,7 @@
 <section class="section section--alt">
   <div class="container">
     <div class="section-head section-head--center">
-      <span class="eyebrow">How we help</span>
+      <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
       <h2>Injury cases we handle</h2>
       <p class="lead">From everyday wrecks to catastrophic losses, we handle the investigation, the insurers and, if needed, the courtroom.</p>
     </div>
@@ -486,7 +486,7 @@
   <div class="container">
     <div class="split">
       <div class="section-head" style="margin-bottom:0">
-        <span class="eyebrow">What to expect</span>
+        <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
         <h2>We take it from here</h2>
         <p class="lead">You've been through enough. Our job is to make the legal side simple, and to keep you informed at every step.</p>
         <p><a class="btn btn--gold mt-4" href="tel:+12565852980"><svg><use href="#i-phone"/></svg>Talk to a Lawyer Today</a></p>
@@ -505,7 +505,7 @@
 <section class="section">
   <div class="container">
     <div class="section-head section-head--center">
-      <span class="eyebrow">Meet the family</span>
+      <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
       <h2>Your attorneys</h2>
       <p class="lead">When you hire The Lackey Law Firm, you work directly with a Lackey.</p>
     </div>
@@ -521,7 +521,7 @@
 <section class="section section--alt">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Case results</span>
+      <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
       <h2>Results that change lives</h2>
     </div>
     <div class="grid grid--4">
@@ -541,7 +541,7 @@
 <section class="section">
   <div class="container">
     <div class="section-head section-head--center">
-      <span class="eyebrow">Client reviews</span>
+      <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
       <h2>What our clients say</h2>
     </div>
     <div class="grid grid--3">
@@ -557,7 +557,7 @@
 <section class="section section--alt">
   <div class="container container--read">
     <div class="section-head section-head--center">
-      <span class="eyebrow">Questions</span>
+      <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
       <h2>Frequently asked questions</h2>
     </div>
     <div class="accordion">
@@ -573,7 +573,7 @@
 <section class="section">
   <div class="container">
     <div class="cluster" style="justify-content:space-between;margin-bottom:var(--sp-7)">
-      <div class="section-head" style="margin-bottom:0"><span class="eyebrow">From the blog</span><h2>Latest news &amp; guides</h2></div>
+      <div class="section-head" style="margin-bottom:0"><svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg><h2>Latest news &amp; guides</h2></div>
       <a class="btn btn--outline" href="../blog/">All Articles</a>
     </div>
     <div class="grid grid--3">
@@ -589,7 +589,7 @@
   <div class="container">
     <div class="cta-band">
       <div>
-        <span class="eyebrow">Free consultation</span>
+        <svg class="mark" viewBox="0 0 46 45" aria-hidden="true"><use href="#i-logo"/></svg>
         <h2 class="mt-4">Talk to a Lackey today</h2>
         <p class="mt-4">No fee unless we win. Call now or send us your details and we'll call you back.</p>
       </div>
@@ -608,7 +608,7 @@
   <div class="container">
     <div class="footer__grid">
       <div class="stack">
-        <a class="brand" href="../"><svg class="brand__mark" viewBox="0 0 38 37" aria-hidden="true"><use href="#i-logo"/></svg><span class="brand__name">The Lackey Law Firm<small>Family-owned since 1981</small></span></a>
+        <a class="brand" href="../"><img src="../images/u-logo.png" alt="The Lackey Law Firm" width="184" height="92"></a>
         <p>Personal injury lawyers serving Huntsville, Scottsboro and all of North Alabama.</p>
         <div class="social"><a href="https://www.facebook.com/lackeylawfirm/" aria-label="Facebook"><svg><use href="#i-facebook"/></svg></a><a href="https://www.youtube.com/@thelackeylawfirm" aria-label="YouTube"><svg><use href="#i-youtube"/></svg></a></div>
       </div>
