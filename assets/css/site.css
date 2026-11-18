@@ -468,7 +468,7 @@
   .map { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); }
   .map iframe { width: 100%; height: auto; aspect-ratio: 16 / 9; min-height: 320px; border: 0; }
   .form-embed { background: var(--c-white); border-radius: var(--r-lg); padding: var(--sp-4); box-shadow: var(--shadow-md); border-top: 4px solid var(--c-gold-400); }
-  .form-embed iframe { width: 100%; border: 0; }
+  .form-embed iframe { display: block; width: 100%; min-height: 540px; border: 0; }
 
   /* ---- Lists -------------------------------------------------------- */
   .check-list { list-style: none; padding: 0; display: grid; gap: var(--sp-2); }
