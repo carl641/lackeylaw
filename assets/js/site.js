@@ -18,22 +18,52 @@
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
   }
 
-  // Dropdown menus in the main navigation (hover opens them on desktop; this
-  // makes them work by click, tap and keyboard too)
+  // Dropdown menus in the main navigation. aria-expanded on the trigger is the
+  // one state the CSS reads to show a menu and flip its arrow, so hover (mouse,
+  // desktop layout only), click, tap and keyboard all open and close it the
+  // same way and the arrow always matches the menu.
   var triggers = document.querySelectorAll('.nav__trigger');
+  var desktop = matchMedia('(min-width: 1025px)');
+  var isOpen = function (t) { return t.getAttribute('aria-expanded') === 'true'; };
   var closeMenus = function (except) {
     triggers.forEach(function (t) { if (t !== except) t.setAttribute('aria-expanded', 'false'); });
   };
+  var openMenu = function (t) { closeMenus(t); t.setAttribute('aria-expanded', 'true'); };
   triggers.forEach(function (t) {
+    var item = t.closest('.nav__item');
+    var hoveredAt = 0;
     t.addEventListener('click', function (e) {
       e.stopPropagation();
-      var open = t.getAttribute('aria-expanded') !== 'true';
-      closeMenus(t);
-      t.setAttribute('aria-expanded', String(open));
+      if (!isOpen(t)) openMenu(t);
+      // A click that lands just after hovering opened the menu was meant to
+      // open it, so it doesn't snap shut again.
+      else if (Date.now() - hoveredAt > 500) t.setAttribute('aria-expanded', 'false');
+    });
+    if (!item) return;
+    // Mouse only: touch taps also fire pointerenter, and the tap's own click
+    // should be what opens the menu.
+    item.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse' || !desktop.matches || isOpen(t)) return;
+      hoveredAt = Date.now();
+      openMenu(t);
+    });
+    item.addEventListener('pointerleave', function (e) {
+      if (e.pointerType === 'mouse' && desktop.matches) t.setAttribute('aria-expanded', 'false');
+    });
+    // Tabbing out of a desktop menu closes it. (Not in the mobile menu, where
+    // the open list pushes the items below it down: closing it on the press
+    // would move the item being tapped out from under the finger.)
+    item.addEventListener('focusout', function (e) {
+      if (desktop.matches && e.relatedTarget && !item.contains(e.relatedTarget)) t.setAttribute('aria-expanded', 'false');
     });
   });
   document.addEventListener('click', function (e) { if (!e.target.closest('.nav__item')) closeMenus(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenus(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var item = document.activeElement && document.activeElement.closest && document.activeElement.closest('.nav__item');
+    closeMenus();
+    if (item) item.querySelector('.nav__trigger').focus();
+  });
 
   // Tabs: panels stack without JS; with JS only the selected one shows
   document.querySelectorAll('.tabs').forEach(function (box) {

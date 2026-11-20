@@ -369,6 +369,9 @@
   .nav__item { position: relative; }
   .nav__trigger { display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; cursor: pointer; }
   .nav__trigger svg { width: 14px; height: 14px; transition: transform var(--dur-fast); }
+  /* With JS, aria-expanded alone opens a menu (and flips its arrow): site.js sets it
+     on hover, click, tap and keyboard, so the arrow and the menu always agree.
+     Without JS, hover and keyboard focus still open the menus on desktop. */
   .nav__trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
   .nav__menu { display: none; }
   .nav__menu a { display: block; text-decoration: none; }
@@ -379,8 +382,9 @@
   @media (min-width: 1025px) {
     .nav__menu { position: absolute; top: 100%; left: 0; z-index: 10; min-width: 240px; padding: var(--sp-3); background: var(--c-white); border-radius: var(--r-md); box-shadow: var(--shadow-lg); border-top: 3px solid var(--c-gold-400); }
     .nav__menu--wide { display: none; grid-template-columns: repeat(2, minmax(250px, 1fr)); gap: var(--sp-4); left: 50%; transform: translateX(-50%); }
-    .nav__item:hover > .nav__menu, .nav__item:focus-within > .nav__menu, .nav__trigger[aria-expanded="true"] + .nav__menu { display: block; }
-    .nav__item:hover > .nav__menu--wide, .nav__item:focus-within > .nav__menu--wide, .nav__trigger[aria-expanded="true"] + .nav__menu--wide { display: grid; }
+    html:not(.js) .nav__item:is(:hover, :focus-within) > .nav__menu, .nav__trigger[aria-expanded="true"] + .nav__menu { display: block; }
+    html:not(.js) .nav__item:is(:hover, :focus-within) > .nav__menu--wide, .nav__trigger[aria-expanded="true"] + .nav__menu--wide { display: grid; }
+    html:not(.js) .nav__item:is(:hover, :focus-within) > .nav__trigger svg { transform: rotate(180deg); }
     .nav__item:last-of-type .nav__menu { left: auto; right: 0; }
   }
   @media (max-width: 1024px) {
