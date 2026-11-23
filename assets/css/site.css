@@ -75,7 +75,6 @@
   .section-head { max-width: 720px; margin-bottom: var(--sp-7); }
   .section-head--center { margin-inline: auto; text-align: center; }
   .section-head > * + * { margin-top: var(--sp-4); }
-  .section-head > .mark + * { margin-top: var(--sp-5); }
 
   .grid { display: grid; gap: var(--sp-5); }
   .grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
@@ -97,13 +96,7 @@
   .skip-link { position: absolute; left: var(--sp-4); top: -100px; z-index: 100; background: var(--c-white); color: var(--c-maroon-700); padding: var(--sp-3) var(--sp-4); border-radius: var(--r-md); font-weight: var(--fw-bold); }
   .skip-link:focus { top: var(--sp-4); }
 
-  /* ---- Section mark & lead ----------------------------------------
-     The logo's block (white tile, maroon L, gold square), used above section headings in place
-     of an eyebrow label. Proportions and colours match images/u-logo.png. */
-  .mark { display: block; width: 36px; height: 35px; flex: none; }
-  .mark--sm { width: 26px; height: 25px; }
-  .mark--lg { width: 48px; height: 47px; }
-  .section-head--center .mark, .text-center .mark { margin-inline: auto; }
+  /* ---- Lead -------------------------------------------------------- */
   .lead { font-size: var(--fs-lead); line-height: 1.6; color: var(--color-muted); }
   .section--dark .lead, .hero .lead { color: rgb(255 255 255 / .82); }
 
@@ -407,7 +400,6 @@
   .page-hero a:not(.btn) { color: var(--c-gold-400); }
   .page-hero .btn { margin-right: var(--sp-2); }
   .page-hero .flow > * + * { margin-top: var(--sp-4); }
-  .page-hero .flow > .mark + * { margin-top: var(--sp-5); }
   .page-hero strong { color: var(--c-white); }
   .page-hero .stats { margin-top: var(--sp-6); }
   .page-hero .stat__value { color: var(--c-gold-400); }
@@ -424,7 +416,6 @@
   .hero--home .hero__img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 49% 100%; order: 2; }
   .hero--home .container { display: flex; flex-direction: column; gap: var(--sp-5); padding-block: var(--sp-7) var(--sp-6); text-align: center; align-items: center; }
   .hero--home .hero__text { max-width: 900px; }
-  .hero--home .mark { margin-inline: auto; }
   .hero--home h1 { font-size: var(--fs-display); margin: var(--sp-4) 0 var(--sp-2); text-wrap: balance; }
   .hero--home h2 { color: var(--c-gold-400); font-size: var(--fs-h2); }
   .hero--home h3 { color: rgb(255 255 255 / .9); font-family: var(--font-body); font-weight: var(--fw-semi); font-size: var(--fs-lead); margin-top: var(--sp-2); text-wrap: balance; }
@@ -436,7 +427,6 @@
       linear-gradient(180deg, rgb(58 11 1 / .92) 0%, rgb(58 11 1 / .7) 24%, rgb(58 11 1 / 0) 42%),
       linear-gradient(0deg, rgb(58 11 1 / .85) 0%, rgb(58 11 1 / .35) 18%, rgb(58 11 1 / 0) 30%); }
     .hero--home .container { height: 100%; justify-content: space-between; padding-block: clamp(1.25rem, 3.5vh, 2.5rem) clamp(1.5rem, 5vh, 3rem); }
-    .hero--home .mark { width: 34px; height: 34px; }
     .hero--home h1 { font-size: min(var(--fs-display), 6.4vh); margin: var(--sp-2) 0 var(--sp-1); text-shadow: 0 2px 18px rgb(0 0 0 / .45); }
     .hero--home h2 { font-size: min(var(--fs-h2), 4vh); text-shadow: 0 2px 14px rgb(0 0 0 / .45); }
     .hero--home h3 { font-size: min(var(--fs-lead), 2.6vh); margin-top: var(--sp-1); text-shadow: 0 1px 10px rgb(0 0 0 / .5); }
@@ -453,7 +443,6 @@
   .flow > * + * { margin-top: var(--sp-4); }
   .flow > :is(h2, .section-head, .section-row) { margin-top: 0; }
   .flow > * + :is(h2, .section-head, .section-row, .split, .grid, .stats, .accordion, .tabs, .scroller) { margin-top: var(--sp-6); }
-  .flow > .mark + * { margin-top: var(--sp-4); }
   .flow > :is(p, ul, ol, h2, h3, h4, .lead, blockquote) { max-width: var(--w-read); }
   .text-center { text-align: center; }
   .section .prose { margin-inline: 0; }
