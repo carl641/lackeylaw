@@ -336,12 +336,11 @@
   /* Inside a split column: one column, heading above the button */
   .split .cta-band { grid-template-columns: 1fr; }
   .split .flow > * + .cta-band { margin-top: var(--sp-6); }
-  /* Text + box beside a form: both columns end on the same line, the box sits at the bottom of the text column */
+  /* Text + box beside a form: both columns end on the same line. The box sits under the text and grows to meet the form's bottom (or the form card grows, if the form is shorter) */
   @media (min-width: 1025px) {
     .split.split--form { align-items: stretch; }
     .split--form > .flow { display: flex; flex-direction: column; }
-    .split--form > .flow > .cta-band { margin-top: auto; }
-    .split--form > .flow > :nth-last-child(2):has(+ .cta-band) { margin-bottom: var(--sp-6); }
+    .split--form > .flow > .cta-band { flex: 1; align-content: center; }
     .split--form > .flow > .form-embed { flex: 1; }
   }
   .split .cta-band { padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem); gap: var(--sp-4); }
