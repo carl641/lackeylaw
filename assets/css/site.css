@@ -263,13 +263,13 @@
   .step p { color: var(--color-muted); font-size: var(--fs-small); }
   .section--dark .step p { color: rgb(255 255 255 / .72); }
 
-  /* ---- Accordion (native <details>, no JS needed) ------------------ */
+  /* ---- Accordion (native <details>; site.js adds one-open-at-a-time and a smooth open/close) ---- */
   .accordion { border-top: 1px solid var(--color-border); }
   .accordion details { border-bottom: 1px solid var(--color-border); }
   .accordion summary { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4); padding: var(--sp-5) 0; cursor: pointer; list-style: none; font-family: var(--font-heading); font-weight: var(--fw-bold); font-size: 1.0625rem; color: var(--c-ink); }
   .accordion summary::-webkit-details-marker { display: none; }
   .accordion summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--c-maroon-100); color: var(--c-maroon-700); font-size: 1.25rem; font-weight: var(--fw-semi); transition: transform var(--dur) var(--ease), background var(--dur); }
-  .accordion details[open] summary::after { transform: rotate(45deg); background: var(--c-maroon-700); color: var(--c-gold-400); }
+  .accordion details[open]:not(.is-closing) summary::after { transform: rotate(45deg); background: var(--c-maroon-700); color: var(--c-gold-400); }
   .accordion summary:hover { color: var(--c-maroon-700); }
   .accordion__body { padding: 0 0 var(--sp-5); color: var(--color-muted); }
   .accordion__body > * + * { margin-top: var(--sp-3); }

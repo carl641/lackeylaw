@@ -1,5 +1,5 @@
 /* The Lackey Law Firm — site script (replaces jQuery + Elementor runtime).
-   Mobile menu, nav dropdowns, tabs, sticky-header shadow, reveal-on-scroll,
+   Mobile menu, nav dropdowns, tabs, accordions, sticky-header shadow, reveal-on-scroll,
    lazy JotForm embed and deferred chat widget. No dependencies. */
 (function () {
   var doc = document.documentElement;
@@ -194,6 +194,48 @@
     loadScript('https://collectcdn.com/launcher.js');
   };
   chatEvents.forEach(function (ev) { window.addEventListener(ev, loadChat, { passive: true }); });
+
+  // Accordions: one item open at a time within each .accordion, with a smooth
+  // open/close. Without JS they still work as plain <details>.
+  var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  var animate = function (d, opening) {
+    var summary = d.querySelector('summary');
+    if (d._anim) d._anim.cancel();
+    if (reduceMotion.matches || !d.animate) {
+      d.classList.remove('is-closing');
+      d.open = opening;
+      return;
+    }
+    var start = d.offsetHeight;
+    var edges = d.offsetHeight - d.clientHeight;
+    if (opening) d.open = true;
+    var end = opening ? d.offsetHeight : summary.offsetHeight + edges;
+    d.classList.toggle('is-closing', !opening);
+    d.style.overflow = 'hidden';
+    d._anim = d.animate({ height: [start + 'px', end + 'px'] }, { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    d._anim.onfinish = function () {
+      if (!opening) d.open = false;
+      d.classList.remove('is-closing');
+      d.style.overflow = '';
+      d._anim = null;
+    };
+    d._anim.oncancel = function () { d.style.overflow = ''; };
+  };
+  document.querySelectorAll('.accordion').forEach(function (acc) {
+    var items = acc.querySelectorAll('details');
+    items.forEach(function (d) {
+      var summary = d.querySelector('summary');
+      if (!summary) return;
+      summary.addEventListener('click', function (e) {
+        e.preventDefault();
+        var opening = !d.open || d.classList.contains('is-closing');
+        if (opening) {
+          items.forEach(function (o) { if (o !== d && o.open && !o.classList.contains('is-closing')) animate(o, false); });
+        }
+        animate(d, opening);
+      });
+    });
+  });
 
   // Reveal on scroll (skipped when the visitor prefers reduced motion)
   var items = document.querySelectorAll('.reveal');
