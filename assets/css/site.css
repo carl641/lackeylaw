@@ -72,7 +72,7 @@
   .section--dark :is(h1, h2, h3, h4, strong) { color: var(--c-white); }
   .section--dark a:not(.btn) { color: var(--c-gold-400); }
 
-  .section-head { max-width: 720px; margin-bottom: var(--sp-7); }
+  .section-head { margin-bottom: var(--sp-7); }
   .section-head--center { margin-inline: auto; text-align: center; }
   .section-head > * + * { margin-top: var(--sp-4); }
 
