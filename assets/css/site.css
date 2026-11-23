@@ -475,6 +475,7 @@
   .split > .flow > * + :is(h2, h3) { margin-top: var(--sp-6); }
   .split { align-items: start; }
   .split:has(> .flow > .media:only-child) { align-items: center; }
+  .split.split--top, .split.split--top:has(> .flow > .media:only-child) { align-items: start; }  /* e.g. a lawyer's photo beside a long bio */
   .grid > .flow > * + * { margin-top: var(--sp-3); }
   .section-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--sp-4); margin-bottom: var(--sp-6); }
   .section-row .section-head { margin-bottom: 0; }
