@@ -442,7 +442,7 @@
      runs the full container width, in line with images and maps. */
   .flow > * + * { margin-top: var(--sp-4); }
   .flow > :is(h2, .section-head, .section-row) { margin-top: 0; }
-  .flow > * + :is(h2, .section-head, .section-row, .split, .grid, .stats, .accordion, .tabs, .scroller) { margin-top: var(--sp-6); }
+  .flow > * + :is(h2, .section-head, .section-row, .split, .grid, .stats, .accordion, .tabs, .scroller, .map) { margin-top: var(--sp-6); }
   .text-center { text-align: center; }
   .section .prose { margin-inline: 0; }
   :is(.page, .single-post, .page-results, .page-blog) .section { padding-block: clamp(2.5rem, 1.8rem + 2.5vw, 4.25rem); }
