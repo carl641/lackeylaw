@@ -312,7 +312,7 @@
   .table tbody tr:nth-child(even) { background: var(--c-cream); }
 
   /* ---- Prose (blog posts, practice-area body copy) ----------------- */
-  .prose { max-width: var(--w-read); }
+  .prose { max-width: none; }
   .prose > * + * { margin-top: 1.3em; }
   .prose h2 { margin-top: 2.4em; }
   .prose h3 { margin-top: 1.9em; color: var(--c-maroon-700); }
@@ -439,11 +439,10 @@
 
   /* ---- Content flow -------------------------------------------------
      .flow spaces whatever converted content sits in a section; text
-     inside it keeps a readable measure. */
+     runs the full container width, in line with images and maps. */
   .flow > * + * { margin-top: var(--sp-4); }
   .flow > :is(h2, .section-head, .section-row) { margin-top: 0; }
   .flow > * + :is(h2, .section-head, .section-row, .split, .grid, .stats, .accordion, .tabs, .scroller) { margin-top: var(--sp-6); }
-  .flow > :is(p, ul, ol, h2, h3, h4, .lead, blockquote) { max-width: var(--w-read); }
   .text-center { text-align: center; }
   .section .prose { margin-inline: 0; }
   :is(.page, .single-post, .page-results, .page-blog) .section { padding-block: clamp(2.5rem, 1.8rem + 2.5vw, 4.25rem); }
@@ -516,7 +515,6 @@
   .tabs__panel + .tabs__panel { margin-top: var(--sp-7); }
   .js .tabs__panel + .tabs__panel { margin-top: 0; }
   .js .tabs__panel[hidden] { display: none; }
-  .tabs__panel > :is(p, h2, h3) { max-width: var(--w-read); }
 
   .hours { list-style: none; padding: 0; font-size: var(--fs-small); }
   .hours li { display: flex; justify-content: space-between; gap: var(--sp-4); padding: var(--sp-1) 0; border-bottom: 1px dashed var(--color-border); }
@@ -535,8 +533,6 @@
   .result-note > * { margin: 0; }
   @media (min-width: 720px) { .result-note { grid-column: span 2; } }
 
-  /* Home page: text runs the full container width */
-  .page-home .flow > :is(p, ul, ol, h2, h3, h4, .lead, blockquote), .page-home .prose { max-width: none; }
 
   /* ---- Blog post ---------------------------------------------------- */
   .post { padding-block: var(--sp-7) var(--sp-9); }
