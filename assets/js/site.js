@@ -237,36 +237,71 @@
     });
   });
 
-  // In-page links (e.g. Service Areas > Huntsville -> #hsvpi): content above the target that
-  // loads late (the reviews widget, images) changes the page height after the browser has
-  // scrolled, leaving the visitor short of the section. For a few seconds after the jump, keep
-  // the target in place whenever the layout changes; stop as soon as the visitor scrolls.
-  var keepTarget = null, keepUntil = 0, keepObserver = null, keepFirst = true;
-  var stopKeeping = function () {
-    keepTarget = null;
-    if (keepObserver) { keepObserver.disconnect(); keepObserver = null; }
-    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.removeEventListener(ev, stopKeeping); });
+  // In-page links (e.g. Service Areas > Huntsville -> #hsvpi). Content above the target that
+  // loads late (the reviews widget, images) changes the page height mid-scroll, so a normal
+  // smooth scroll stops short and then has to correct. Instead, glide to the target while
+  // re-reading its position every frame, then hold it in place for a few seconds if anything
+  // still moves. Any scrolling by the visitor stops both.
+  var reduceScroll = matchMedia('(prefers-reduced-motion: reduce)');
+  var glide = { el: null, raf: 0, ro: null, until: 0 };
+  var targetY = function (el) {
+    var pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    return Math.max(0, Math.min(max, el.getBoundingClientRect().top + window.pageYOffset - pad));
   };
-  var followHash = function (hash) {
-    if (!hash || hash.length < 2 || !('ResizeObserver' in window)) return;
-    var el = document.getElementById(decodeURIComponent(hash.slice(1)));
-    if (!el) return;
-    stopKeeping();
-    keepTarget = el; keepUntil = Date.now() + 4000; keepFirst = true;
-    keepObserver = new ResizeObserver(function () {
-      if (keepFirst) { keepFirst = false; return; }  // the initial callback: let the normal (smooth) jump run
-      if (!keepTarget || Date.now() > keepUntil) { stopKeeping(); return; }
-      keepTarget.scrollIntoView({ block: 'start', behavior: 'auto' });
+  var jumpTo = function (y) { window.scrollTo({ top: y, behavior: 'instant' }); };
+  var stopGlide = function () {
+    glide.el = null;
+    if (glide.raf) { cancelAnimationFrame(glide.raf); glide.raf = 0; }
+    if (glide.ro) { glide.ro.disconnect(); glide.ro = null; }
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.removeEventListener(ev, stopGlide); });
+  };
+  var holdTarget = function (el) {
+    if (!('ResizeObserver' in window)) return;
+    glide.until = Date.now() + 4000;
+    glide.ro = new ResizeObserver(function () {
+      if (glide.el !== el || Date.now() > glide.until) { stopGlide(); return; }
+      jumpTo(targetY(el));
     });
-    keepObserver.observe(document.body);
-    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.addEventListener(ev, stopKeeping, { passive: true }); });
+    glide.ro.observe(document.body);
   };
-  if (location.hash) followHash(location.hash);
-  window.addEventListener('hashchange', function () { followHash(location.hash); });
+  var glideTo = function (el) {
+    stopGlide();
+    glide.el = el;
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.addEventListener(ev, stopGlide, { passive: true }); });
+    if (reduceScroll.matches) { jumpTo(targetY(el)); holdTarget(el); return; }
+    var from = window.pageYOffset;
+    var dist = Math.abs(targetY(el) - from);
+    var dur = Math.min(1000, Math.max(400, dist / 6));
+    var t0 = performance.now();
+    var step = function (now) {
+      if (glide.el !== el) return;
+      var t = Math.min(1, (now - t0) / dur);
+      var e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;  // ease in-out
+      jumpTo(from + (targetY(el) - from) * e);                            // target re-read every frame
+      if (t < 1) glide.raf = requestAnimationFrame(step);
+      else { glide.raf = 0; holdTarget(el); }
+    };
+    glide.raf = requestAnimationFrame(step);
+  };
+  var hashTarget = function (hash) {
+    if (!hash || hash.length < 2) return null;
+    try { return document.getElementById(decodeURIComponent(hash.slice(1))); } catch (err) { return null; }
+  };
   document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var a = e.target.closest && e.target.closest('a[href*="#"]');
-    if (a && a.hash && a.pathname === location.pathname && a.host === location.host) setTimeout(function () { followHash(a.hash); }, 0);
+    if (!a || !a.hash || a.pathname !== location.pathname || a.host !== location.host) return;
+    var el = hashTarget(a.hash);
+    if (!el) return;
+    e.preventDefault();
+    if (location.hash !== a.hash) history.pushState(null, '', a.hash);
+    glideTo(el);
   });
+  // Arriving from another page with a #hash: take over from wherever the browser's own jump got to.
+  var arrive = hashTarget(location.hash);
+  if (arrive) requestAnimationFrame(function () { glideTo(arrive); });
+  window.addEventListener('popstate', function () { var el = hashTarget(location.hash); if (el) glideTo(el); });
 
   // Reveal on scroll (skipped when the visitor prefers reduced motion)
   var items = document.querySelectorAll('.reveal');
