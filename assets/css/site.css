@@ -248,6 +248,17 @@
   .post-card:hover :is(h2, h3) a { color: var(--c-maroon-700); }
   .post-card p { font-size: var(--fs-small); color: var(--color-muted); }
   .post-card .btn-link { margin-top: auto; }
+  /* Home page Latest News: same responsive layout as the Meet the Lackey Law Family cards */
+  .latest-news .post-card__body { border-top: 3px solid var(--c-gold-400); }
+  @media (min-width: 900px) { .latest-news .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 899px) { .latest-news .grid { gap: var(--sp-4); } }
+  /* Tablets: one card per row, image beside the text. Phones keep the regular card (image on top). */
+  @media (min-width: 560px) and (max-width: 899px) {
+    .latest-news .grid { grid-template-columns: 1fr; }
+    .latest-news .post-card { flex-direction: row; }
+    .latest-news .post-card__img { flex: 0 0 clamp(108px, 30%, 220px); aspect-ratio: auto; }
+    .latest-news .post-card__body { border-top: 0; border-left: 3px solid var(--c-gold-400); padding: var(--sp-4); gap: var(--sp-2); }
+  }
 
   /* ---- Awards strip ------------------------------------------------- */
   .awards { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--sp-6) var(--sp-7); }
