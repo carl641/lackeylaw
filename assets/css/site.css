@@ -484,6 +484,7 @@
   .flow > * + :is(h2, .section-head, .section-row, .split, .grid, .stats, .accordion, .tabs, .scroller, .map) { margin-top: var(--sp-6); }
   .flow > :is(.grid, .stats, .split, .accordion, .tabs, .scroller, .map) + :is(h2, h3) { margin-top: var(--sp-8); }  /* a heading after a block of cards starts a new group */
   .text-center { text-align: center; }
+  @media (max-width: 899px) { .hide-below-desktop { display: none !important; } }  /* extras that only work beside text, e.g. a photo next to a short paragraph */
   .section .prose { margin-inline: 0; }
   :is(.page, .single-post, .page-results, .page-blog) .section { padding-block: clamp(2.5rem, 1.8rem + 2.5vw, 4.25rem); }
   .split > .flow > * + * { margin-top: var(--sp-4); }
