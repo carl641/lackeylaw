@@ -85,6 +85,7 @@
   @media (min-width: 1025px) { .split { grid-template-columns: 1.1fr .9fr; } .split--rev > :first-child { order: 2; } }
   /* Text + photo: stay side by side on tablets too (from 768px), instead of stacking a full-width photo */
   @media (min-width: 768px) and (max-width: 1024px) { .split:has(> .flow > .media) { grid-template-columns: 1.1fr .9fr; gap: var(--sp-6); } }
+  @media (min-width: 768px) and (max-width: 899px) { .split:has(> .flow.hide-below-desktop > .media):not(:has(> .flow:not(.hide-below-desktop) > .media)) { grid-template-columns: 1fr; } }  /* photo hidden here: let the text use the full width */
   /* Phones, where the photo stacks under the text: keep it from getting taller than the screen needs */
   @media (max-width: 767px) { .split > .flow > .media img { max-height: 340px; object-fit: cover; } }
 
