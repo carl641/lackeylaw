@@ -424,6 +424,7 @@
   .page-hero :is(h1, h2) { font-size: var(--fs-h1); font-weight: var(--fw-black); color: var(--c-white); max-width: 22ch; }
   .page-hero h1 em, .page-hero h2 em { font-style: normal; color: var(--c-gold-400); }
   .page-hero .lead, .page-hero p { max-width: 640px; color: rgb(255 255 255 / .85); }
+  .page-hero .lead--wide { max-width: 980px; }  /* a longer intro that should run wider than the usual blurb (Results) */
   .page-hero a:not(.btn) { color: var(--c-gold-400); }
   .page-hero .btn { margin-right: var(--sp-2); }
   .page-hero .flow > * + * { margin-top: var(--sp-4); }
