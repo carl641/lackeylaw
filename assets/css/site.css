@@ -538,6 +538,25 @@
   .person h2 a::after { content: ""; position: absolute; inset: 0; }
   .person__body > p { font-size: var(--fs-small); color: var(--color-muted); }
   .person__body .btn-link { margin-top: var(--sp-4); }
+  /* Smaller screens: one card per row, photo beside the text instead of a full-width square above it */
+  @media (max-width: 899px) {
+    .grid:has(> .person) { grid-template-columns: 1fr; gap: var(--sp-4); }
+    .person { flex-direction: row; }
+    .person__photo { flex: 0 0 clamp(108px, 30%, 220px); aspect-ratio: auto; }
+    .person__body { border-top: 0; border-left: 3px solid var(--c-gold-400); padding: var(--sp-4); }
+    .person h2 { font-size: 1.2rem; margin-block: var(--sp-1) var(--sp-2); }
+    .person__body .btn-link { margin-top: var(--sp-2); }
+  }
+  /* Phones: small square headshot beside the role and name, bio full width below */
+  @media (max-width: 559px) {
+    .person { display: grid; grid-template-columns: 88px 1fr; column-gap: var(--sp-4); align-items: center; padding: var(--sp-4); border-top: 3px solid var(--c-gold-400); }
+    .person__photo { grid-row: 1 / span 2; width: 88px; height: 88px; border-radius: var(--r-md); align-self: center; }
+    .person__body { display: contents; }
+    .person__role { grid-column: 2; align-self: end; line-height: 1.4; }
+    .person h2 { grid-column: 2; align-self: start; margin: var(--sp-1) 0 0; }
+    .person__body > p, .person__body .btn-link { grid-column: 1 / -1; }
+    .person__body > p { margin-top: var(--sp-3); }
+  }
 
   /* ---- Contact page: call info + office cards beside the (long) contact form ---- */
   .contact-info .offices { display: grid; gap: var(--sp-4); }
