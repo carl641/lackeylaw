@@ -249,14 +249,20 @@
     var max = document.documentElement.scrollHeight - window.innerHeight;
     return Math.max(0, Math.min(max, el.getBoundingClientRect().top + window.pageYOffset - pad));
   };
-  var jumpTo = function (y) { window.scrollTo({ top: y, behavior: 'instant' }); };
+  // Instant scroll that works the same everywhere: the page sets scroll-behavior: smooth in CSS,
+  // which would turn every step of the glide into its own little smooth scroll, so switch it off
+  // for the duration and use the plain two-argument scrollTo.
+  var rootStyle = document.documentElement.style;
+  var jumpTo = function (y) { rootStyle.scrollBehavior = 'auto'; window.scrollTo(0, y); };
   var stopGlide = function () {
     glide.el = null;
+    rootStyle.scrollBehavior = '';
     if (glide.raf) { cancelAnimationFrame(glide.raf); glide.raf = 0; }
     if (glide.ro) { glide.ro.disconnect(); glide.ro = null; }
     ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.removeEventListener(ev, stopGlide); });
   };
   var holdTarget = function (el) {
+    setTimeout(function () { if (glide.el === el) stopGlide(); }, 4000);
     if (!('ResizeObserver' in window)) return;
     glide.until = Date.now() + 4000;
     glide.ro = new ResizeObserver(function () {
@@ -268,6 +274,10 @@
   var glideTo = function (el) {
     stopGlide();
     glide.el = el;
+    // Start any embedded form in the target's section now, so it has loaded and settled by the time
+    // the glide arrives instead of popping in (and resizing its section) as the visitor gets there.
+    var sect = el.closest('section') || el.parentNode;
+    if (sect && typeof buildForm === 'function') sect.querySelectorAll('[data-jotform]').forEach(buildForm);
     ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.addEventListener(ev, stopGlide, { passive: true }); });
     if (reduceScroll.matches) { jumpTo(targetY(el)); holdTarget(el); return; }
     var from = window.pageYOffset;
