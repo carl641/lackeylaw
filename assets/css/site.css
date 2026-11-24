@@ -532,6 +532,8 @@
 
   /* ---- Contact page: call info + office cards beside the (long) contact form ---- */
   .contact-info .offices { display: grid; gap: var(--sp-4); }
+  /* Location pages: the Get In Touch column beside the practice-area list stays in view while that list scrolls */
+  @media (min-width: 1025px) { .grid:has(> .contact-stack) { align-items: start; } .contact-stack { position: sticky; top: calc(var(--header-h) + var(--sp-5)); } }
   .office { padding: var(--sp-5); }
   .office p { font-size: 1rem; color: var(--color-text); }
   .office__links { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); }
