@@ -537,6 +537,22 @@
   /* On screens tall enough to show the whole column (about 865px plus the header), it stays in view while visitors scroll the taller form */
   @media (min-width: 1025px) and (min-height: 1000px) { .contact-info { position: sticky; top: calc(var(--header-h) + var(--sp-5)); } }
 
+  /* ---- Plain practice pages (body.page--plain) ----------------------
+     The list-heavy practice-area pages (Bicycle, Pedestrian, Dog Bite…) use the same plain look as the
+     other practice pages: no boxes around the lists, gold bullets instead of check marks, and a
+     notice shown as a simple note with a gold rule. Remove the class from <body> to restore the boxed look. */
+  .page--plain main .section .card { background: none; border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+  .page--plain main .section .card:hover { transform: none; box-shadow: none; }
+  .page--plain main .section .grid { row-gap: var(--sp-6); }
+  .page--plain main .check-list { list-style: disc; padding-left: 1.3em; gap: var(--sp-2); }
+  .page--plain main .check-list li { padding-left: 0; }
+  .page--plain main .check-list li::before { display: none; }
+  .page--plain main .check-list li::marker { color: var(--c-gold-500); }
+  .page--plain main .card .check-list { font-size: inherit; }
+  .page--plain main .notice { background: none; border-radius: 0; border-left: 3px solid var(--c-gold-400); padding: var(--sp-1) 0 var(--sp-1) var(--sp-5); }
+  .intro-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .flow > .intro-actions + .stats { margin-top: var(--sp-7); }
+
   /* ---- Logo wall (e.g. "As Featured Locally On") ------------------- */
   .logo-wall { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-4); }
   .logo-wall > a, .logo-wall > div { flex: 0 1 270px; display: grid; place-items: center; height: 104px; padding: var(--sp-4); background: var(--c-white); border: 1px solid var(--color-border); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); transition: transform var(--dur) var(--ease), box-shadow var(--dur); }
