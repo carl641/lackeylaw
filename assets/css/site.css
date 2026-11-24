@@ -316,6 +316,8 @@
   .prose > * + * { margin-top: 1.3em; }
   .prose h2 { margin-top: 2.4em; }
   .prose > :first-child { margin-top: 0; }
+  .prose .card > * { margin: 0; }  /* a card inside long-form text keeps the card's own spacing */
+  .prose .check-list { padding-left: 0; }
   .prose h3 { margin-top: 1.9em; color: var(--c-maroon-700); }
   .prose :is(h2, h3) + * { margin-top: .6em; }
   .prose ul, .prose ol { padding-left: 1.3em; }
