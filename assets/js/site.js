@@ -237,6 +237,37 @@
     });
   });
 
+  // In-page links (e.g. Service Areas > Huntsville -> #hsvpi): content above the target that
+  // loads late (the reviews widget, images) changes the page height after the browser has
+  // scrolled, leaving the visitor short of the section. For a few seconds after the jump, keep
+  // the target in place whenever the layout changes; stop as soon as the visitor scrolls.
+  var keepTarget = null, keepUntil = 0, keepObserver = null, keepFirst = true;
+  var stopKeeping = function () {
+    keepTarget = null;
+    if (keepObserver) { keepObserver.disconnect(); keepObserver = null; }
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.removeEventListener(ev, stopKeeping); });
+  };
+  var followHash = function (hash) {
+    if (!hash || hash.length < 2 || !('ResizeObserver' in window)) return;
+    var el = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!el) return;
+    stopKeeping();
+    keepTarget = el; keepUntil = Date.now() + 4000; keepFirst = true;
+    keepObserver = new ResizeObserver(function () {
+      if (keepFirst) { keepFirst = false; return; }  // the initial callback: let the normal (smooth) jump run
+      if (!keepTarget || Date.now() > keepUntil) { stopKeeping(); return; }
+      keepTarget.scrollIntoView({ block: 'start', behavior: 'auto' });
+    });
+    keepObserver.observe(document.body);
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.addEventListener(ev, stopKeeping, { passive: true }); });
+  };
+  if (location.hash) followHash(location.hash);
+  window.addEventListener('hashchange', function () { followHash(location.hash); });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="#"]');
+    if (a && a.hash && a.pathname === location.pathname && a.host === location.host) setTimeout(function () { followHash(a.hash); }, 0);
+  });
+
   // Reveal on scroll (skipped when the visitor prefers reduced motion)
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
