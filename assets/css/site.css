@@ -431,6 +431,11 @@
   .page-hero .stats { margin-top: var(--sp-6); }
   .page-hero .stat__value { color: var(--c-gold-400); }
   .page-hero .stat__label { color: rgb(255 255 255 / .75); }
+  /* Hero with text on the left and a stacked stats column on the right (Results page) */
+  .page-hero .hero-split { align-items: center; }
+  .page-hero .stats--stack { grid-template-columns: 1fr; gap: var(--sp-5); margin-top: 0; }
+  .page-hero .stat__label a { color: inherit; text-decoration-color: var(--c-gold-400); }
+  @media (min-width: 1025px) { .page-hero .hero-split { grid-template-columns: 1.4fr .6fr; } }
 
   /* ---- Home hero ----------------------------------------------------
      Full-screen photo of the three lawyers. Their faces sit in the middle
