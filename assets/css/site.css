@@ -526,6 +526,17 @@
   .person__body > p { font-size: var(--fs-small); color: var(--color-muted); }
   .person__body .btn-link { margin-top: var(--sp-4); }
 
+  /* ---- Contact page: call info + office cards beside the (long) contact form ---- */
+  .contact-info .offices { display: grid; gap: var(--sp-4); }
+  .office { padding: var(--sp-5); }
+  .office p { font-size: 1rem; color: var(--color-text); }
+  .office__links { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); }
+  .office .map { margin-top: var(--sp-2); }
+  .office .map iframe { min-height: 240px; }
+  @media (min-width: 1025px) { .split.contact-split { align-items: start; } }
+  /* On screens tall enough to show the whole column (about 865px plus the header), it stays in view while visitors scroll the taller form */
+  @media (min-width: 1025px) and (min-height: 1000px) { .contact-info { position: sticky; top: calc(var(--header-h) + var(--sp-5)); } }
+
   /* ---- Logo wall (e.g. "As Featured Locally On") ------------------- */
   .logo-wall { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-4); }
   .logo-wall > a, .logo-wall > div { flex: 0 1 270px; display: grid; place-items: center; height: 104px; padding: var(--sp-4); background: var(--c-white); border: 1px solid var(--color-border); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); transition: transform var(--dur) var(--ease), box-shadow var(--dur); }
