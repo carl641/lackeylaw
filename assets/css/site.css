@@ -538,8 +538,9 @@
   .person h2 a::after { content: ""; position: absolute; inset: 0; }
   .person__body > p { font-size: var(--fs-small); color: var(--color-muted); }
   .person__body .btn-link { margin-top: var(--sp-4); }
-  /* Smaller screens: one card per row, photo beside the text instead of a full-width square above it */
-  @media (max-width: 899px) {
+  @media (min-width: 1200px) { .person__photo { aspect-ratio: 4 / 3; } }  /* three across: a shorter photo keeps the cards compact */
+  /* Up to small-laptop width: one card per row, photo beside the text instead of a full-width square above it */
+  @media (max-width: 1199px) {
     .grid:has(> .person) { grid-template-columns: 1fr; gap: var(--sp-4); }
     .person { flex-direction: row; }
     .person__photo { flex: 0 0 clamp(108px, 30%, 220px); aspect-ratio: auto; }
