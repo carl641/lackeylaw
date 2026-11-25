@@ -576,6 +576,20 @@
     .person__body > p { margin-top: var(--sp-3); }
   }
 
+  /* Attorney headshots are small originals (300-675px wide), so show them near their native size instead of stretching them across the card */
+  @media (min-width: 900px) {
+    .person__photo { width: min(220px, calc(100% - 2 * var(--sp-5))); aspect-ratio: 4 / 3; margin: var(--sp-5) auto var(--sp-4); border-radius: var(--r-md); }
+  }
+  @media (min-width: 560px) and (max-width: 899px) {
+    .person { align-items: flex-start; }
+    .person__photo { flex: 0 0 140px; height: 140px; margin: var(--sp-4) 0 var(--sp-4) var(--sp-4); border-radius: var(--r-md); }
+  }
+
+  /* Lawyer bio pages: cap the portrait at about its native 400px source width */
+  .split--top .media { max-width: 320px; }
+  @media (min-width: 768px) { .split.split--top:has(> .flow > .media) { grid-template-columns: 320px 1fr; } }
+  @media (max-width: 767px) { .split--top .media { max-width: 280px; margin-inline: auto; } .split--top > .flow > .media img { max-height: none; } }
+
   /* ---- Contact page: call info + office cards beside the (long) contact form ---- */
   .contact-info .offices { display: grid; gap: var(--sp-4); }
   .office { padding: var(--sp-5); }
